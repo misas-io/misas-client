@@ -4,6 +4,39 @@ import { AppState } from '../app.service';
 import { Title } from './title';
 import { XLarge } from './x-large';
 
+import { Angular2Apollo } from 'angular2-apollo';
+import gql from 'graphql-tag';
+
+const firsttest = gql`
+  {
+    searchGrps(sortBy: NEAR, point: { coordinates: [
+            -106.43022537231445,
+            31.721012524697652
+          ]
+    })
+    {
+      edges {
+        node {
+           id
+           ... on Grp {
+            name
+            address {
+              city
+              state
+            }
+            nextEvents(next: 5)
+            distance
+            location {
+              type
+              coordinates
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 @Component({
   // The selector is what angular internally uses
   // for `document.querySelectorAll(selector)` in our index.html
@@ -21,14 +54,26 @@ import { XLarge } from './x-large';
 export class HomeComponent {
   // Set our default values
   localState = { value: '' };
+
+  // Graphql vars
+  loading: boolean;
+  searchGrps: any;
   // TypeScript public modifiers
-  constructor(public appState: AppState, public title: Title) {
+  constructor(private apollo: Angular2Apollo, public appState: AppState, public title: Title) {
 
   }
 
   ngOnInit() {
     console.log('hello `Home` component');
     // this.title.getData().subscribe(data => this.data = data);
+
+    this.apollo.watchQuery({
+      query: firsttest
+    }).subscribe(({data}) => {
+      this.loading = data.loading;
+      this.searchGrps = data.searchGrps;
+      console.log(this.searchGrps);
+    });
   }
 
   submitState(value: string) {

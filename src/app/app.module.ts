@@ -7,11 +7,17 @@ import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularcla
 
 import { MdlModule } from 'angular2-mdl';
 import { AgmCoreModule } from 'angular2-google-maps/core';
-import ApolloClient from 'apollo-client';
+import ApolloClient, { createNetworkInterface } from 'apollo-client';
 import { ApolloModule } from 'angular2-apollo';
 
 // Create the client
-const client = new ApolloClient();
+const client = new ApolloClient({
+  networkInterface: createNetworkInterface({
+    uri: 'http://dev.api.misas.io/graphql'
+  })
+});
+
+
 
 /*
  * Platform and Environment providers/directives/pipes
