@@ -1,5 +1,22 @@
 <div class="card-container">
-  <h1 x-large class="sample-content">Your Content Here</h1>
+  <sebm-google-map
+    [styles]="mapOptions.style"
+    [latitude]="mapOptions.lat"
+    [longitude]="mapOptions.lng"
+    [zoom]="mapOptions.zoom">
+
+			<sebm-google-map-marker
+							*ngFor="let m of markers; let i = index"
+							[latitude]="m.lat"
+							[longitude]="m.lng"
+							[markerDraggable]="false">
+
+				<sebm-google-map-info-window>
+					<strong>{{ m.label }}</strong>
+				</sebm-google-map-info-window>
+
+			</sebm-google-map-marker>
+  </sebm-google-map>
 
   <div>
     For material design components use the <a href="https://github.com/AngularClass/angular2-webpack-starter/tree/material2"><b>material2</b></a> branch
