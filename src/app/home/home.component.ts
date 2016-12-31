@@ -7,6 +7,7 @@ import { XLarge } from './x-large';
 import { Angular2Apollo } from 'angular2-apollo';
 import gql from 'graphql-tag';
 
+
 const firsttest = gql`
   {
     searchGrps(sortBy: NEAR, point: { coordinates: [
@@ -52,15 +53,26 @@ const firsttest = gql`
   templateUrl: './home.component.html'
 })
 export class HomeComponent {
+  // lat: number = 51.678418;
+  // lng: number = 7.809007;
+  mapOptions: Object = {
+		lat: 31.721012524697652,
+		lng: -106.43022537231445,
+		style: [{"featureType":"road","stylers":[{"hue":"#5e00ff"},{"saturation":-79}]},{"featureType":"poi","stylers":[{"saturation":-78},{"hue":"#6600ff"},{"lightness":-47},{"visibility":"off"}]},{"featureType":"road.local","stylers":[{"lightness":22}]},{"featureType":"landscape","stylers":[{"hue":"#6600ff"},{"saturation":-11}]},{},{},{"featureType":"water","stylers":[{"saturation":-65},{"hue":"#1900ff"},{"lightness":8}]},{"featureType":"road.local","stylers":[{"weight":1.3},{"lightness":30}]},{"featureType":"transit","stylers":[{"visibility":"simplified"},{"hue":"#5e00ff"},{"saturation":-16}]},{"featureType":"transit.line","stylers":[{"saturation":-72}]},{}],
+    zoom: 12
+  }
+
   // Set our default values
   localState = { value: '' };
 
   // Graphql vars
   loading: boolean;
   searchGrps: any;
+
+  markers = [];
+
   // TypeScript public modifiers
   constructor(private apollo: Angular2Apollo, public appState: AppState, public title: Title) {
-
   }
 
   ngOnInit() {
@@ -73,7 +85,19 @@ export class HomeComponent {
       this.loading = data.loading;
       this.searchGrps = data.searchGrps;
       console.log(this.searchGrps);
+      this.createMarkers();
     });
+  }
+
+  createMarkers() {
+		this.searchGrps.edges.forEach((grp: any) => {
+			let marker = {
+				lat: grp.node.location.coordinates[1],
+				lng: grp.node.location.coordinates[0],
+				label: grp.node.name
+			};
+			this.markers.push(marker);
+		});
   }
 
   submitState(value: string) {
