@@ -1,0 +1,18 @@
+<sebm-google-map
+  [styles]="mapOptions.style"
+  [latitude]="mapOptions.lat"
+  [longitude]="mapOptions.lng"
+  [zoom]="mapOptions.zoom">
+
+  <sebm-google-map-marker
+    *ngFor="let grp of grps; let i = index"
+    [latitude]="grp.lat"
+    [longitude]="grp.lng"
+    [markerDraggable]="false">
+
+    <sebm-google-map-info-window>
+      <strong>{{ grp.label }}</strong>
+    </sebm-google-map-info-window>
+
+  </sebm-google-map-marker>
+</sebm-google-map>

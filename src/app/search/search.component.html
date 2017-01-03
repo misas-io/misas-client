@@ -1,0 +1,16 @@
+<form (ngSubmit)="onSubmit()" #srchGrpsForm="ngForm">
+  <mdl-textfield
+		type="text"
+		label="Nombre"
+		name="name"
+    [(ngModel)]="searchModel.name"
+    floating-label>
+  </mdl-textfield>
+	<button
+  	mdl-button
+		mdl-button-type="raised"
+		mdl-colored="primary"
+		mdl-ripple>
+    Buscar
+  </button>
+</form>
