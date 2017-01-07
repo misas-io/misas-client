@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { Angular2Apollo } from 'angular2-apollo';
 import gql from 'graphql-tag';
@@ -11,6 +11,7 @@ import gql from 'graphql-tag';
 })
 
 export class SearchComponent {
+  @Input() mapBounds: Number[][];
   loading: boolean;
   grps: any;
   grpMarkers: {
@@ -20,21 +21,35 @@ export class SearchComponent {
   }[] = [];
 
   searchModel: {
-    name: String
+    name: String,
+    city: String,
+    state: String,
+    useMap: boolean
   } = {
-    name: ''
+    name: '',
+    city: '',
+    state: '',
+    useMap: true
   };
 
   constructor(private apollo: Angular2Apollo) {}
 
 	onSubmit() {
 		console.log("Submitted");
+
+    let searchLocationBy: String = '';
+    if (this.searchModel.useMap) {
+      searchLocationBy = `polygon: { coordinates: ${JSON.stringify(this.mapBounds)} }`;
+    } else {
+      searchLocationBy = `state: "${this.searchModel.state}", city: "${this.searchModel.city}"`;
+    }
+
     let query = gql`
 		{
 			searchGrps(
         sortBy: RELEVANCE,
         name: "${this.searchModel.name}",
-        city: "Juárez"
+        ${searchLocationBy}
       )
 			{
 				edges {
@@ -66,6 +81,8 @@ export class SearchComponent {
       this.loading = data.loading;
       this.grps = data.searchGrps;
       console.log(this.grps);
+
+      this.grpMarkers = [];
 
       this.grps.edges.forEach((grp: any) => {
 				let marker = {

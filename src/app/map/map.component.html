@@ -1,8 +1,10 @@
 <sebm-google-map
+  (boundsChange)="boundsChange($event)"
   [styles]="mapOptions.style"
   [latitude]="mapOptions.lat"
   [longitude]="mapOptions.lng"
-  [zoom]="mapOptions.zoom">
+  [zoom]="mapOptions.zoom"
+  [scrollwheel]="mapOptions.scrollwheel">
 
   <sebm-google-map-marker
     *ngFor="let grp of grps; let i = index"

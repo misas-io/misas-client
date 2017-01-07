@@ -6,6 +6,23 @@
     [(ngModel)]="searchModel.name"
     floating-label>
   </mdl-textfield>
+	<mdl-switch  name="useMap" [(ngModel)]="searchModel.useMap">Usar mapa</mdl-switch>
+	<div *ngIf="!searchModel.useMap">
+		<mdl-textfield
+			type="text"
+			label="Estado"
+			name="state"
+			[(ngModel)]="searchModel.state"
+			floating-label>
+		</mdl-textfield>
+		<mdl-textfield
+			type="text"
+			label="Ciudad"
+			name="city"
+			[(ngModel)]="searchModel.city"
+			floating-label>
+		</mdl-textfield>
+	</div>
 	<button
   	mdl-button
 		mdl-button-type="raised"

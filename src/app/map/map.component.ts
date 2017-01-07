@@ -20,12 +20,27 @@ import { Component, Input } from '@angular/core';
 export class MapComponent {
 
   @Input() grps: any[];
+  bounds: Number[][];
+
+  constructor() {}
+
+  boundsChange($event: any) {
+    console.log($event);
+    this.bounds = [
+      [ $event.b.b, $event.f.f ],
+      [ $event.b.b, $event.f.b ],
+      [ $event.b.f, $event.f.b ],
+      [ $event.b.f, $event.f.f ],
+      [ $event.b.b, $event.f.f ]
+    ]
+  }
 
   mapOptions: Object = {
 		lat: 31.721012524697652,
 		lng: -106.43022537231445,
 		style: [{"featureType":"road","stylers":[{"hue":"#5e00ff"},{"saturation":-79}]},{"featureType":"poi","stylers":[{"saturation":-78},{"hue":"#6600ff"},{"lightness":-47},{"visibility":"off"}]},{"featureType":"road.local","stylers":[{"lightness":22}]},{"featureType":"landscape","stylers":[{"hue":"#6600ff"},{"saturation":-11}]},{},{},{"featureType":"water","stylers":[{"saturation":-65},{"hue":"#1900ff"},{"lightness":8}]},{"featureType":"road.local","stylers":[{"weight":1.3},{"lightness":30}]},{"featureType":"transit","stylers":[{"visibility":"simplified"},{"hue":"#5e00ff"},{"saturation":-16}]},{"featureType":"transit.line","stylers":[{"saturation":-72}]},{}],
-    zoom: 12
+    zoom: 12,
+    scrollwheel: false
   }
 
 }
