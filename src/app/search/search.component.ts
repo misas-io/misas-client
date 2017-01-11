@@ -84,6 +84,7 @@ export class SearchComponent {
       console.log(this.grps);
 
       this.grpMarkers = [];
+      this.grpList = [];
 
       this.grps.edges.forEach((grp: any) => {
 				let marker = {
