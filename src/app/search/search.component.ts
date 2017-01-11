@@ -19,6 +19,7 @@ export class SearchComponent {
     lng: Number,
     label: String
   }[] = [];
+  grpList: any[] = [];
 
   searchModel: {
     name: String,
@@ -91,6 +92,7 @@ export class SearchComponent {
 					label: grp.node.name
 				};
 				this.grpMarkers.push(marker);
+        this.grpList.push(grp);
       });
 
     });

@@ -35,6 +35,7 @@ import { XLarge } from './home/x-large';
 
 import { SearchComponent } from './search';
 import { MapComponent    } from './map';
+import { ListComponent   } from './list';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -60,7 +61,8 @@ type StoreType = {
     NoContentComponent,
     XLarge,
     SearchComponent,
-    MapComponent
+    MapComponent,
+    ListComponent
   ],
   imports: [ // import Angular's modules
     MdlModule,

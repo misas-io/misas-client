@@ -1,33 +1,44 @@
-<form (ngSubmit)="onSubmit()" #srchGrpsForm="ngForm">
-  <mdl-textfield
-		type="text"
-		label="Nombre"
-		name="name"
-    [(ngModel)]="searchModel.name"
-    floating-label>
-  </mdl-textfield>
-	<mdl-switch  name="useMap" [(ngModel)]="searchModel.useMap">Usar mapa</mdl-switch>
-	<div *ngIf="!searchModel.useMap">
-		<mdl-textfield
-			type="text"
-			label="Estado"
-			name="state"
-			[(ngModel)]="searchModel.state"
-			floating-label>
-		</mdl-textfield>
-		<mdl-textfield
-			type="text"
-			label="Ciudad"
-			name="city"
-			[(ngModel)]="searchModel.city"
-			floating-label>
-		</mdl-textfield>
+<div class="mdl-grid" mdl-shadow="4">
+	<div class="mdl-cell mdl-cell--12-col">
+		<form (ngSubmit)="onSubmit()" #srchGrpsForm="ngForm">
+		  <div class="mdl-grid">
+				<div class="mdl-cell mdl-cell--4-col">
+					<mdl-textfield
+						type="text"
+						label="Nombre"
+						name="name"
+            [(ngModel)]="searchModel.name">
+					</mdl-textfield>
+				</div>
+				<div class="mdl-cell mdl-cell--1-col">
+					<mdl-switch  name="useMap" [(ngModel)]="searchModel.useMap">Usar mapa</mdl-switch>
+				</div>
+				<div *ngIf="!searchModel.useMap" class="mdl-cell mdl-col--8">
+					<mdl-textfield
+						type="text"
+						label="Estado"
+						name="state"
+						[(ngModel)]="searchModel.state"
+						floating-label>
+					</mdl-textfield>
+					<mdl-textfield
+						type="text"
+						label="Ciudad"
+						name="city"
+						[(ngModel)]="searchModel.city"
+						floating-label>
+					</mdl-textfield>
+				</div>
+				<div class="mdl-cell mdl-cell--1-col">
+					<button
+						 mdl-button
+						 mdl-button-type="raised"
+						 mdl-colored="primary"
+						 mdl-ripple>
+						 Buscar
+					</button>
+				</div>
+		  </div>
+		</form>
 	</div>
-	<button
-  	mdl-button
-		mdl-button-type="raised"
-		mdl-colored="primary"
-		mdl-ripple>
-    Buscar
-  </button>
-</form>
+</div>
