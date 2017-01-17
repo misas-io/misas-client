@@ -1,20 +1,31 @@
 <sebm-google-map
+  *ngIf="grpMarkers && grpMarkers.length > 0"
+  [fitBounds]="mapBounds"
   (boundsChange)="boundsChange($event)"
   [styles]="mapOptions.style"
-  [latitude]="mapOptions.lat"
-  [longitude]="mapOptions.lng"
-  [zoom]="mapOptions.zoom"
   [scrollwheel]="mapOptions.scrollwheel">
-
   <sebm-google-map-marker
-    *ngFor="let grp of grps; let i = index"
-    [latitude]="grp.lat"
-    [longitude]="grp.lng"
-    [markerDraggable]="false">
-
+    *ngIf="currentLocation"
+    [latitude]="currentLocation.coordinates[1]"
+    [longitude]="currentLocation.coordinates[0]"
+    >
     <sebm-google-map-info-window>
-      <strong>{{ grp.label }}</strong>
+      <strong>Mi localizacion</strong>
     </sebm-google-map-info-window>
-
+  </sebm-google-map-marker>
+  <sebm-google-map-marker
+    *ngFor="let m of grpMarkers; let i = index"
+    [latitude]="m.lat"
+    [longitude]="m.lng"
+    [markerDraggable]="false"
+    [openInfoWindow]="false"
+    (mouseOver)="m.mouseOver($event)"
+    (mouseOut)="m.mouseOut($event)"
+    >
+    <sebm-google-map-info-window
+      [isOpen]="m.infoWindowOpen"
+      >
+      <strong>{{ m.label }}</strong>
+    </sebm-google-map-info-window>
   </sebm-google-map-marker>
 </sebm-google-map>

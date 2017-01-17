@@ -1,35 +1,24 @@
-<div class="mdl-grid" mdl-shadow="4">
+<div class="mdl-grid mdl-grid--no-spacing" mdl-shadow="4">
 	<div class="mdl-cell mdl-cell--12-col">
 		<form (ngSubmit)="onSubmit()" #srchGrpsForm="ngForm">
-		  <div class="mdl-grid">
-				<div class="mdl-cell mdl-cell--4-col">
-					<mdl-textfield
-						type="text"
-						label="Nombre"
-						name="name"
+		  <div class="mdl-grid mdl-grid--no-spacing">
+				<div class="mdl-cell mdl-cell--5-col mdl-cell--1-offset">
+					<mdl-textfield 
+            type="text" 
+            label="Nombre de la Parroquias o Iglesia" 
+            name="name" 
             [(ngModel)]="searchModel.name">
 					</mdl-textfield>
 				</div>
-				<div class="mdl-cell mdl-cell--1-col">
-					<mdl-switch  name="useMap" [(ngModel)]="searchModel.useMap">Usar mapa</mdl-switch>
-				</div>
-				<div *ngIf="!searchModel.useMap" class="mdl-cell mdl-col--8">
+        <div class="mdl-cell mdl-cell--4-col">
 					<mdl-textfield
 						type="text"
-						label="Estado"
-						name="state"
-						[(ngModel)]="searchModel.state"
-						floating-label>
-					</mdl-textfield>
-					<mdl-textfield
-						type="text"
-						label="Ciudad"
-						name="city"
-						[(ngModel)]="searchModel.city"
-						floating-label>
+						label="Ciudad, Estado"
+						name="location"
+            [(ngModel)]="searchModel.location">
 					</mdl-textfield>
 				</div>
-				<div class="mdl-cell mdl-cell--1-col">
+				<div class="mdl-cell mdl-cell--1-col mdl-cell--1-offset">
 					<button
 						 mdl-button
 						 mdl-button-type="raised"
@@ -38,6 +27,49 @@
 						 Buscar
 					</button>
 				</div>
+        <div class="mdl-cell mdl-cell--12-col">
+          <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--2-col mdl-cell--1-offset">
+              <div class="mdl-grid mdl-grid--no-spacing">
+                <div class="mdl-cell mdl-cell--12-col">
+                  <h6>Ordenar por</h6>
+                </div>
+                <div class="mdl-cell mdl-cell--11-col mdl-cell--1-offset">
+                  <mdl-radio name="sort_by" 
+                             value="BEST" 
+                             [(ngModel)]="searchModel.sort_by" 
+                             (ngModelChange)="refreshSearch()" 
+                             mdl-ripple>Mejor
+                  </mdl-radio>
+                </div>
+                <div class="mdl-cell mdl-cell--11-col mdl-cell--1-offset">
+                  <mdl-radio name="sort_by" 
+                             value="RELEVANCE" 
+                             [(ngModel)]="searchModel.sort_by" 
+                             (ngModelChange)="refreshSearch()" 
+                             mdl-ripple>Nombre relevante
+                  </mdl-radio>
+                </div>
+                <div class="mdl-cell mdl-cell--11-col mdl-cell--1-offset">
+                  <mdl-radio name="sort_by" 
+                             value="NEAR" 
+                             [(ngModel)]="searchModel.sort_by" 
+                             (ngModelChange)="refreshSearch()" 
+                             mdl-ripple>Cercana
+                  </mdl-radio>
+                </div>
+                <div class="mdl-cell mdl-cell--11-col mdl-cell--1-offset">
+                  <mdl-radio name="sort_by" 
+                             value="TIME" 
+                             [(ngModel)]="searchModel.sort_by" 
+                             (ngModelChange)="refreshSearch()" 
+                             mdl-ripple>Temprano
+                  </mdl-radio>
+                </div>
+              </div>
+            </div>  
+          </div>  
+        </div>
 		  </div>
 		</form>
 	</div>

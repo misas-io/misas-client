@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'grps-list', // <grps-list></grps-list>
@@ -8,8 +8,16 @@ import { Component, Input } from '@angular/core';
 })
 
 export class ListComponent {
-  @Input() grps: any[];
+  @Input() grps: any;
 
   constructor() {}
+
+  /*
+  ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+    if (changes['grps'] && !isNil(this.grps)) {
+        
+    }
+  };
+ */
 
 }
