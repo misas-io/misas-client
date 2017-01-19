@@ -129,6 +129,9 @@ export class MapComponent implements OnChanges, OnInit {
         this.grpMarkers = [];
         for (let edge of this.grps.edges) {
           let grp = edge.node;
+          if (grp.location.coordinates.length != 2) {
+            continue;
+          }
           let lat = grp.location.coordinates[1];
           let lng = grp.location.coordinates[0];
           let label = grp.name;
