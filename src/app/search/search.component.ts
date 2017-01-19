@@ -50,7 +50,12 @@ query SearchGrps(
   styleUrls: [ './search.component.css' ],
   templateUrl: './search.component.html',
   providers: [SearchFieldsObserver],
-  styles: [ 'mdl-textfield { width: 95%; }' ]
+  styles: [ `
+    mdl-textfield { width: 95%; }
+
+    #search-header {
+      margin-top: 20px;
+    }` ]
 })
 
 export class SearchComponent implements OnInit, OnChanges {
@@ -69,8 +74,44 @@ export class SearchComponent implements OnInit, OnChanges {
     this.grpsValue = value;
     this.grpsChange.emit(this.grpsValue);
   };
+  private sortOptions: any[] = [
+    {
+      title: 'Mejor',
+      value: 'BEST'
+    },
+    {
+      title: 'Nombre Relevante',
+      value: 'RELEVANCE'
+    },
+    {
+      title: 'Cercana',
+      value: 'NEAR'
+    },
+    {
+      title: 'Temprano',
+      value: 'TIME'
+    },
+  ];
+  private eventTypes: any[] = [
+    {
+      name: 'Misa',
+      value: 'misa'
+    }, 
+    {
+      name: 'Confesion',
+      value: 'confesion'
+    }, 
+    {
+      name: 'Evento',
+      value: 'evento'
+    }, 
+  ];
+  private eventType: any[];
   private loading: boolean;
   private searchArea: any = null;
+  private searchOptions: any = {
+    showAllOptions: true,
+  };
   private searchModel: any = {
     name: '',
     city: '',
@@ -81,6 +122,7 @@ export class SearchComponent implements OnInit, OnChanges {
     useMap: true,
     sort_by: "BEST",
     polygon: null,
+    event_types: {},
   };
 
   constructor(private apollo: Angular2Apollo, private searchFields: SearchFieldsObserver) {};
