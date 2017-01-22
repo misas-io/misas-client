@@ -1,6 +1,8 @@
-<section class="section--center mdl-grid">
+<section class="section--center mdl-grid"
+         *ngIf="grps && grps.edges"
+         >
 	<mdl-card
-		*ngFor="let grp of grps"
+		*ngFor="let grp of grps.edges"
 		mdl-shadow="2"
 		class="mdl-cell mdl-cell--12-col">
 		<mdl-card-title>

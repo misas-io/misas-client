@@ -1,44 +1,77 @@
-<div class="mdl-grid" mdl-shadow="4">
-	<div class="mdl-cell mdl-cell--12-col">
-		<form (ngSubmit)="onSubmit()" #srchGrpsForm="ngForm">
-		  <div class="mdl-grid">
-				<div class="mdl-cell mdl-cell--4-col">
-					<mdl-textfield
-						type="text"
-						label="Nombre"
-						name="name"
-            [(ngModel)]="searchModel.name">
-					</mdl-textfield>
-				</div>
-				<div class="mdl-cell mdl-cell--1-col">
-					<mdl-switch  name="useMap" [(ngModel)]="searchModel.useMap">Usar mapa</mdl-switch>
-				</div>
-				<div *ngIf="!searchModel.useMap" class="mdl-cell mdl-col--8">
-					<mdl-textfield
-						type="text"
-						label="Estado"
-						name="state"
-						[(ngModel)]="searchModel.state"
-						floating-label>
-					</mdl-textfield>
-					<mdl-textfield
-						type="text"
-						label="Ciudad"
-						name="city"
-						[(ngModel)]="searchModel.city"
-						floating-label>
-					</mdl-textfield>
-				</div>
-				<div class="mdl-cell mdl-cell--1-col">
-					<button
-						 mdl-button
-						 mdl-button-type="raised"
-						 mdl-colored="primary"
-						 mdl-ripple>
-						 Buscar
-					</button>
-				</div>
-		  </div>
-		</form>
-	</div>
-</div>
+<form (ngSubmit)="onSubmit()" #srchGrpsForm="ngForm">
+  <div class="mdl-grid mdl-grid--no-spacing" mdl-shadow="4">
+    <div class="mdl-cell mdl-cell--12-col">
+      <div id="search-header" class="mdl-grid mdl-grid--no-spacing">
+        <div class="mdl-cell mdl-cell--5-col mdl-cell--1-offset">
+          <mdl-textfield 
+             type="text" 
+             label="Nombre de la Parroquias o Iglesia" 
+             name="name" 
+             [(ngModel)]="searchModel.name">
+          </mdl-textfield>
+        </div>
+        <div class="mdl-cell mdl-cell--3-col">
+          <mdl-textfield
+             type="text"
+             label="Ciudad, Estado"
+             name="location"
+             [(ngModel)]="searchModel.location">
+          </mdl-textfield>
+        </div>
+        <div class="mdl-cell mdl-cell--3-col mdl-cell--top">
+          <button
+             mdl-button
+             mdl-button-type="raised"
+             mdl-colored="primary"
+             mdl-ripple>
+            Buscar
+          </button>
+          <button
+             mdl-button
+             mdl-button-type="raised"
+             mdl-colored="accent"
+             mdl-ripple
+             (click)="searchOptions.showAllOptions=!searchOptions.showAllOptions"
+             >
+            Mas Opciones 
+          </button>
+        </div>
+        <!-- being short options -->
+        <!-- end short options -->
+        <!-- begin all search options -->
+        <div *ngIf="searchOptions.showAllOptions" id="search-options" class="mdl-cell mdl-cell--12-col">
+          <div class="mdl-grid mdl-cell--no-spacing">
+            <div class="mdl-cell mdl-cell--2-col mdl-cell--1-offset">
+              <div class="mdl-grid mdl-grid--no-spacing">
+                <div class="mdl-cell mdl-cell--12-col">
+                  <h6>Ordenar por</h6>
+                </div>
+                <div *ngFor="let sortOption of sortOptions" class="mdl-cell mdl-cell--11-col mdl-cell--1-offset">
+                  <mdl-radio name="sort_by" 
+                             value="{{sortOption.value}}" 
+                             [(ngModel)]="searchModel.sort_by" 
+                             (ngModelChange)="refreshSearch()" 
+                             mdl-ripple>{{sortOption.title}}
+                  </mdl-radio>
+                </div>
+              </div>
+            </div>  
+            <div class="mdl-cell mdl-cell--2-col">
+              <div class="mdl-grid mdl-grid--no-spacing">
+                <div class="mdl-cell mdl-cell--12-col">
+                  <h6>Tipo de evento</h6>
+                </div>
+                <div *ngFor="let eventType of eventTypes" class="mdl-cell mdl-cell--11-col mdl-cell--1-offset">
+                  <mdl-checkbox name="{{eventType.value}}" value="true" [(ngModel)]="searchModel.event_types[eventType.value]">
+                    {{ eventType.name }}
+                  </mdl-checkbox>
+                </div>
+              </div>
+            </div>
+          </div>  
+        </div>
+        <!-- end all search options -->
+      </div>
+    </div>
+  </div>
+</form>
