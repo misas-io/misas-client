@@ -49,15 +49,8 @@ query SearchGrps(
   selector: 'grps-search', 
   styleUrls: [ './search.component.css' ],
   templateUrl: './search.component.html',
-  providers: [SearchFieldsObserver],
-  styles: [ `
-    mdl-textfield { width: 95%; }
-
-    #search-header {
-      margin-top: 20px;
-    }` ]
+  providers: [SearchFieldsObserver]
 })
-
 export class SearchComponent implements OnInit, OnChanges {
   @Input('queryBounds') queryBounds: Number[][];
   @Output('boundsChanged') bounds = new EventEmitter<Number[][]>();

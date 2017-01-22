@@ -10,7 +10,7 @@
              [(ngModel)]="searchModel.name">
           </mdl-textfield>
         </div>
-        <div class="mdl-cell mdl-cell--4-col">
+        <div class="mdl-cell mdl-cell--3-col">
           <mdl-textfield
              type="text"
              label="Ciudad, Estado"
@@ -18,7 +18,7 @@
              [(ngModel)]="searchModel.location">
           </mdl-textfield>
         </div>
-        <div class="mdl-cell mdl-cell--1-col mdl-cell--top">
+        <div class="mdl-cell mdl-cell--3-col mdl-cell--top">
           <button
              mdl-button
              mdl-button-type="raised"
@@ -26,9 +26,20 @@
              mdl-ripple>
             Buscar
           </button>
+          <button
+             mdl-button
+             mdl-button-type="raised"
+             mdl-colored="accent"
+             mdl-ripple
+             (click)="searchOptions.showAllOptions=!searchOptions.showAllOptions"
+             >
+            Mas Opciones 
+          </button>
         </div>
-        <!-- begin search options -->
-        <div class="mdl-cell mdl-cell--12-col">
+        <!-- being short options -->
+        <!-- end short options -->
+        <!-- begin all search options -->
+        <div *ngIf="searchOptions.showAllOptions" id="search-options" class="mdl-cell mdl-cell--12-col">
           <div class="mdl-grid mdl-cell--no-spacing">
             <div class="mdl-cell mdl-cell--2-col mdl-cell--1-offset">
               <div class="mdl-grid mdl-grid--no-spacing">
@@ -59,7 +70,7 @@
             </div>
           </div>  
         </div>
-        <!-- end search options -->
+        <!-- end all search options -->
       </div>
     </div>
   </div>

@@ -13,7 +13,7 @@ import { ApolloModule } from 'angular2-apollo';
 // Create the client
 const client = new ApolloClient({
   networkInterface: createNetworkInterface({
-    uri: 'http://dev.api.misas.io/graphql'
+    uri: 'https://dev.api.misas.io/graphql'
   })
 });
 
