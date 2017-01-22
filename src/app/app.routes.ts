@@ -8,6 +8,8 @@ import { DataResolver } from './app.resolver';
 
 export const ROUTES: Routes = [
   { path: '',      component: HomeComponent },
+  // { path: 'grps', component: GrpMasterLayoutComponent },
+  // { path: 'grps/:id', component: GrpDetailLayoutComponent },
   { path: 'home',  component: HomeComponent },
   { path: 'about', component: AboutComponent },
   {

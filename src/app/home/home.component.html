@@ -1,58 +1,21 @@
-<div class="card-container">
-  <sebm-google-map
-    [styles]="mapOptions.style"
-    [latitude]="mapOptions.lat"
-    [longitude]="mapOptions.lng"
-    [zoom]="mapOptions.zoom">
-
-			<sebm-google-map-marker
-							*ngFor="let m of markers; let i = index"
-							[latitude]="m.lat"
-							[longitude]="m.lng"
-							[markerDraggable]="false">
-
-				<sebm-google-map-info-window>
-					<strong>{{ m.label }}</strong>
-				</sebm-google-map-info-window>
-
-			</sebm-google-map-marker>
-  </sebm-google-map>
-
-  <div>
-    For material design components use the <a href="https://github.com/AngularClass/angular2-webpack-starter/tree/material2"><b>material2</b></a> branch
+<div class="mdl-grid">
+  <!-- search options -->
+  <div class="mdl-cell mdl-cell--10-col mdl-cell--1-offset">
   </div>
-
-  <hr>
-
-  <div>
-    For hot module reloading run
-    <pre>npm run start:hmr</pre>
+  <grps-search class="mdl-cell mdl-cell--10-col mdl-cell--1-offset" 
+               [(grps)]="grps"
+               (currentLocation)="currentLocation"
+               [queryBounds]="queryBounds">
+  </grps-search>
+  <!-- list of grps -->
+  <div class="mdl-cell mdl-cell--5-col mdl-cell--1-offset">
+    <grps-list [grps]="grps"></grps-list>
   </div>
-
-  <hr>
-
-  <div>
-    <h4>Local State</h4>
-
-    <form (ngSubmit)="submitState(localState.value)" autocomplete="off">
-
-      <input
-        [value]="localState.value"
-        (input)="localState.value = $event.target.value"
-        placeholder="Submit Local State to App State"
-        autofocus>
-
-      <button md-raised-button color="primary">Submit Value</button>
-    </form>
-    <!--
-        <input type="text" [value]="localState.value" (input)="localState.value = $event.target.value" autofocus>
-        Rather than wiring up two-way data-binding ourselves with [value] and (input)
-        we can use Angular's [(ngModel)] syntax
-        <input type="text" name="textInput" [(ngModel)]="localState.value" autofocus>
-      -->
-
-    <pre>this.localState = {{ localState | json }}</pre>
-
+  <!-- map showing grps -->
+  <div mdl-shadow="2" class="mdl-cell mdl-cell--5-col home-map-container">
+    <grps-map [grps]="grps" 
+              [currentLocation]="currentLocation"
+              (boundsChanged)="queryBounds">
+    </grps-map>
   </div>
-
 </div>

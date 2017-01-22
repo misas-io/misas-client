@@ -13,7 +13,7 @@ import { ApolloModule } from 'angular2-apollo';
 // Create the client
 const client = new ApolloClient({
   networkInterface: createNetworkInterface({
-    uri: 'http://dev.api.misas.io/graphql'
+    uri: 'https://dev.api.misas.io/graphql'
   })
 });
 
@@ -32,6 +32,10 @@ import { HomeComponent } from './home';
 import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 import { XLarge } from './home/x-large';
+
+import { SearchComponent } from './search';
+import { MapComponent    } from './map';
+import { ListComponent   } from './list';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -55,7 +59,10 @@ type StoreType = {
     AboutComponent,
     HomeComponent,
     NoContentComponent,
-    XLarge
+    XLarge,
+    SearchComponent,
+    MapComponent,
+    ListComponent
   ],
   imports: [ // import Angular's modules
     MdlModule,
