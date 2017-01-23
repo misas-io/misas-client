@@ -9,7 +9,7 @@ package_version(){
 }
 
 gen_image_name(){
-  if [ "$JOB_BASE_NAME" != "develop" -o "$JOB_BASE_NAME" != "master" ]; then
+  if [ "$JOB_BASE_NAME" != "develop" -a "$JOB_BASE_NAME" != "master" ]; then
     echo "$MISAS_BASE:`package_version`_0"
 		return
   fi
