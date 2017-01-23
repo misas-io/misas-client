@@ -38,21 +38,21 @@ get_misas_env(){
 name_misas-client_env-file(){
   local ENV_FILE
   ENV_FILE=""
-  if [ "$JOB_BASE_NAME" != "develop" -o "$JOB_BASE_NAME" != "master" ]; then
+  if [ "$JOB_BASE_NAME" != "develop" -a "$JOB_BASE_NAME" != "master" ]; then
     echo "misas-client.io.env"
 		return
   fi
-  ENV_FILE="misas-client.io.`$JOB_BASE_NAME`.env"
+  ENV_FILE="misas-client.io.${JOB_BASE_NAME}.env"
   echo "$ENV_FOLDER/$ENV_FILE"
 }
 
 load_misas-client_env-file(){
   local ENV_FILE
   ENV_FILE=""
-  if [ "$JOB_BASE_NAME" != "develop" -o "$JOB_BASE_NAME" != "master" ]; then
+  if [ "$JOB_BASE_NAME" != "develop" -a "$JOB_BASE_NAME" != "master" ]; then
     exit -1;
   fi
-  ENV_FILE="misas-client.io.`$JOB_BASE_NAME`.env"
+  ENV_FILE="misas-client.io.${JOB_BASE_NAME}.env"
   set +x
   while read env; do
     export $env
