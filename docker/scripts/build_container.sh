@@ -6,6 +6,6 @@ set -x
 docker build -t `gen_image_name` ./
 docker run --rm \
 					 -v `pwd`/:/usr/src/app/ \
-					 --env-file `name_misas-client_env-file` \
+					 --env-file `name_misas_client_env_file` \
 					 --entrypoint yarn \
 					 `gen_image_name` install
