@@ -35,7 +35,7 @@ get_misas_env(){
   esac    # --- end of case ---
 }
 
-name_misas-client_env-file(){
+name_misas_client_env_file(){
   local ENV_FILE
   ENV_FILE=""
   if [ "$JOB_BASE_NAME" != "develop" -a "$JOB_BASE_NAME" != "master" ]; then
@@ -46,7 +46,7 @@ name_misas-client_env-file(){
   echo "$ENV_FOLDER/$ENV_FILE"
 }
 
-load_misas-client_env-file(){
+load_misas_client_env_file(){
   local ENV_FILE
   ENV_FILE=""
   if [ "$JOB_BASE_NAME" != "develop" -a "$JOB_BASE_NAME" != "master" ]; then
