@@ -369,10 +369,10 @@ module.exports = function (env) {
         s3UploadOptions: {
           Bucket: bucketName 
         },
-        /*cloudfrontInvalidateOptions: {
+        cloudfrontInvalidateOptions: {
           DistributionId: process.env.AWS_CLOUDFRONT_DIST_ID,
           Items: ["/*"]
-        }*/
+        }
       }),
     ],
 
