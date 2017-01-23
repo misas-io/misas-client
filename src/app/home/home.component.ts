@@ -22,16 +22,9 @@ import { XLarge } from './x-large';
 
 export class HomeComponent {
   // Set our default values
-  //localState = { value: '' };
   //public grps: any;
   constructor(
     public appState: AppState, 
     public title: Title 
   ) {};
-
-  submitState(value: string) {
-    console.log('submitState', value);
-    this.appState.set('value', value);
-    //this.localState.value = '';
-  }
 }

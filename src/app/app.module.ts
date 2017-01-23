@@ -13,11 +13,9 @@ import { ApolloModule } from 'angular2-apollo';
 // Create the client
 const client = new ApolloClient({
   networkInterface: createNetworkInterface({
-    uri: 'https://dev.api.misas.io/graphql'
+    uri: process.env.CLIENT_URL 
   })
 });
-
-
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -34,8 +32,8 @@ import { NoContentComponent } from './no-content';
 import { XLarge } from './home/x-large';
 
 import { SearchComponent } from './search';
-import { MapComponent    } from './map';
-import { ListComponent   } from './list';
+import { MapComponent } from './map';
+import { ListComponent } from './list';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -67,7 +65,7 @@ type StoreType = {
   imports: [ // import Angular's modules
     MdlModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyAVJCZOn1762Trea50QIVds0RXf2m-_7Ek'
+      apiKey: process.env.GOOGLE_API_KEY 
     }),
     ApolloModule.withClient(client),
     BrowserModule,

@@ -9,6 +9,7 @@ const helpers = require('./helpers');
  * Webpack Plugins
  */
 // problem with copy-webpack-plugin
+const EnvironmentPlugin = require('webpack/lib/EnvironmentPlugin');
 const AssetsPlugin = require('assets-webpack-plugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
@@ -156,6 +157,14 @@ module.exports = function (options) {
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
+      /*
+       * Load environment variables that will be statically keep on the
+       * code.
+       */
+      new EnvironmentPlugin([
+          "CLIENT_URL",
+          "GOOGLE_API_KEY",
+      ]),
       new AssetsPlugin({
         path: helpers.root('dist'),
         filename: 'webpack-assets.json',
@@ -180,7 +189,6 @@ module.exports = function (options) {
       new CommonsChunkPlugin({
         name: ['polyfills', 'vendor'].reverse()
       }),
-
       /**
        * Plugin: ContextReplacementPlugin
        * Description: Provides context to Angular's use of System.import
@@ -292,7 +300,11 @@ module.exports = function (options) {
         /facade(\\|\/)math/,
         helpers.root('node_modules/@angular/core/src/facade/math.js')
       ),
-    ],
+			/*
+			 *
+			 *
+			 */
+	    ],
 
     /*
      * Include polyfills or mocks for various node stuff
@@ -307,7 +319,6 @@ module.exports = function (options) {
       module: false,
       clearImmediate: false,
       setImmediate: false
-    }
-
-  };
-}
+		},
+	};
+};

@@ -60,3 +60,6 @@ npm-debug.log
 # IDE #
 .idea/
 *.swp
+
+# Env file
+misas-client.io.env

@@ -49,7 +49,7 @@ query SearchGrps(
   selector: 'grps-search', 
   styleUrls: [ './search.component.css' ],
   templateUrl: './search.component.html',
-  providers: [SearchFieldsObserver]
+  providers: [Angular2Apollo, SearchFieldsObserver]
 })
 export class SearchComponent implements OnInit, OnChanges {
   @Input('queryBounds') queryBounds: Number[][];
@@ -105,7 +105,7 @@ export class SearchComponent implements OnInit, OnChanges {
   private searchOptions: any = {
     showAllOptions: true,
   };
-  private searchModel: any = {
+  searchModel: any = {
     name: '',
     city: '',
     state: '',
