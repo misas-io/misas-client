@@ -1,7 +1,7 @@
 /*
  * Angular 2 decorators and services
  */
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 
 import { AppState } from './app.service';
 
@@ -88,23 +88,17 @@ import { AppState } from './app.service';
   </mdl-layout>
   `
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   angularclassLogo = 'assets/img/angularclass-avatar.png';
   name = 'Angular 2 Webpack Starter';
   url = 'https://twitter.com/AngularClass';
   copyYear: number;
-
-  constructor(
-    public appState: AppState) {
-
-  }
+  constructor(public appState: AppState) {}
 
   ngOnInit() {
     console.log('Initial App State', this.appState.state);
-
     this.copyYear = new Date().getFullYear();
   }
-
 }
 
 /*

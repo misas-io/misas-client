@@ -3,5 +3,5 @@ MAINTAINER Ricardo Roman <rrmn92@gmail.com>
 
 WORKDIR /usr/src/app
 
-RUN yarn install
+#RUN yarn install
 ENTRYPOINT ["npm"]

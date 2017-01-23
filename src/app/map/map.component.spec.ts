@@ -46,4 +46,4 @@ describe('Map', () => {
     expect(console.log).toHaveBeenCalled();
   })); */
 
-}
+});
