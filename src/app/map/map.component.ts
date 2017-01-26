@@ -46,7 +46,7 @@ class GrpMarker {
   selector: 'grps-map', // <grps-map></grps-map>
   // We need to tell Angular's Dependency Injection which
   // providers are in our app.
-  providers: [],
+  //providers: [],
   // Our list of styles in our component. We may add more
   // to compose many styles together
   styleUrls: [ './map.component.css' ],

@@ -1,1 +1,1 @@
-export * from './search.component.ts';
+export * from './search.component';

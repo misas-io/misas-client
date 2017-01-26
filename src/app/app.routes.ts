@@ -12,9 +12,6 @@ export const ROUTES: Routes = [
   // { path: 'grps/:id', component: GrpDetailLayoutComponent },
   { path: 'home',  component: HomeComponent },
   { path: 'about', component: AboutComponent },
-  {
-    path: 'detail', loadChildren: () => System.import('./+detail')
-      .then((comp: any) => comp.default),
-  },
+  { path: 'detail', loadChildren: './+detail/index#AboutModule'},
   { path: '**',    component: NoContentComponent },
 ];
