@@ -165,11 +165,11 @@ export class SearchComponent implements OnInit, OnChanges {
       query: query,
       variables: this.searchModel
     }).subscribe(
-      ({data}) => {
+      ({data}: { data: any }) => {
         console.log('search.component: new search data!');
         this.grps = data.searchGrps;
         console.log(this.grps);
-        this.loading = data.loading;
+        this.loading = true;
 
         this.searchModel.point = point;
         this.searchModel.name = name;
@@ -186,4 +186,4 @@ export class SearchComponent implements OnInit, OnChanges {
     console.log('search.component: refreshing search');
     this.query();
   };
-}
+};
