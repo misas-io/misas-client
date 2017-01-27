@@ -1,8 +1,10 @@
 <form (ngSubmit)="onSubmit()" #srchGrpsForm="ngForm">
-  <div class="mdl-grid mdl-grid--no-spacing" mdl-shadow="4">
-    <div class="mdl-cell mdl-cell--12-col">
+  <div class="mdl-grid" mdl-shadow="4">
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--4-phone">
       <div id="search-header" class="mdl-grid mdl-grid--no-spacing">
-        <div class="mdl-cell mdl-cell--5-col mdl-cell--1-offset">
+        <div class="mdl-cell mdl-cell--1-col mdl-cell--hide-phone">
+        </div>
+        <div class="mdl-cell mdl-cell--5-col mdl-cell--4-phone">
           <mdl-textfield 
              type="text" 
              label="Nombre de la Parroquias o Iglesia" 
@@ -10,7 +12,7 @@
              [(ngModel)]="searchModel.name">
           </mdl-textfield>
         </div>
-        <div class="mdl-cell mdl-cell--3-col">
+        <div class="mdl-cell mdl-cell--3-col mdl-cell--4-phone">
           <mdl-textfield
              type="text"
              label="Ciudad, Estado"

@@ -7,7 +7,16 @@ import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularcla
 
 import { MdlModule } from 'angular2-mdl';
 import { AgmCoreModule } from 'angular2-google-maps/core';
+import ApolloClient, { createNetworkInterface } from 'apollo-client';
 import { ApolloModule } from 'angular2-apollo';
+
+// Create the client
+const client = new ApolloClient({
+  networkInterface: createNetworkInterface({
+    uri: process.env.CLIENT_URL 
+  })
+});
+
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -25,7 +34,6 @@ import { XLarge } from './home/x-large';
 import { SearchComponent } from './search';
 import { MapComponent } from './map';
 import { ListComponent } from './list';
-import { getClient } from './app.client';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -59,7 +67,7 @@ type StoreType = {
     AgmCoreModule.forRoot({
       apiKey: process.env.GOOGLE_API_KEY 
     }),
-    ApolloModule.withClient(getClient),
+    ApolloModule.withClient(client),
     BrowserModule,
     FormsModule,
     HttpModule,

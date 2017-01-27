@@ -123,6 +123,38 @@ class RemoveAllS3Objects {
 	}
 }
 
+const optionalPlugins = [];
+
+if (
+  accessKeyId &&
+  secretAccessKey && 
+  bucketName &&
+  bucketRegion 
+) {
+  optionalPlugins.push(
+    new RemoveAllS3Objects()
+  );
+  /*
+   * Upload files to S3
+   */
+  optionalPlugins.push(
+    new S3Plugin({
+      s3Options: {
+        accessKeyId: accessKeyId,
+        secretAccessKey: secretAccessKey,
+        region: bucketRegion,
+      },
+      s3UploadOptions: {
+        Bucket: bucketName 
+      },
+      cloudfrontInvalidateOptions: {
+        DistributionId: process.env.AWS_CLOUDFRONT_DIST_ID,
+        Items: ["/*"]
+      }
+    })
+  );
+}
+
 module.exports = function (env) {
   return webpackMerge(commonConfig({env: ENV}), {
 
@@ -356,24 +388,7 @@ module.exports = function (env) {
 
         }
       }),
-			new RemoveAllS3Objects(),
-      /*
-       * Upload files to S3
-       */
-      new S3Plugin({
-        s3Options: {
-          accessKeyId: accessKeyId,
-          secretAccessKey: secretAccessKey,
-          region: bucketRegion,
-        },
-        s3UploadOptions: {
-          Bucket: bucketName 
-        },
-        cloudfrontInvalidateOptions: {
-          DistributionId: process.env.AWS_CLOUDFRONT_DIST_ID,
-          Items: ["/*"]
-        }
-      }),
+      ...optionalPlugins,
     ],
 
     /*

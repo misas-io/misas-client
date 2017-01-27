@@ -29,8 +29,10 @@ query SearchGrps(
         ... on Grp {
           name
           address {
+            address_line_1
             city
             state
+            postal_code
           }
           nextEvents(next: 5)
           distance
