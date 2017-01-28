@@ -22,7 +22,9 @@ import { AppState } from './app.service';
         <mdl-layout-title [routerLink]=" ['./'] ">Misas.io</mdl-layout-title>
         <mdl-layout-spacer></mdl-layout-spacer>
         <!-- Navigation. We hide it in small screens. -->
+        <!--
         <mdl-textfield type="text" [(ngModel)]="text6" icon="search"></mdl-textfield>
+        -->
         <nav class="mdl-navigation mdl-layout--large-screen-only">
           <!--
           <a class="mdl-navigation__link" [routerLink]=" ['./misas'] ">

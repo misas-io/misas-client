@@ -1,8 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { get } from 'lodash';
-import {Angular2Apollo, ApolloQueryObservable} from 'angular2-apollo';
-import gql from 'graphql-tag';
-import { Subscription } from 'rxjs/Subscription';
+import { Component } from '@angular/core';
+
 import { AppState } from '../app.service';
 import { Title } from './title';
 import { XLarge } from './x-large';
@@ -13,18 +10,30 @@ import { XLarge } from './x-large';
   // where, in this case, selector is the string 'home'
   selector: 'home',  // <home></home>
   // We need to tell Angular's Dependency Injection which providers are in our app.
-  providers: [Title],
+  providers: [
+    Title
+  ],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './home.component.css' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
   templateUrl: './home.component.html'
 })
-
 export class HomeComponent {
   // Set our default values
-  //public grps: any;
-  constructor(
-    public appState: AppState, 
-    public title: Title 
-  ) {};
+  localState = { value: '' };
+  // TypeScript public modifiers
+  constructor(public appState: AppState, public title: Title) {
+
+  }
+
+  ngOnInit() {
+    console.log('hello `Home` component');
+    // this.title.getData().subscribe(data => this.data = data);
+  }
+
+  submitState(value: string) {
+    console.log('submitState', value);
+    this.appState.set('value', value);
+    this.localState.value = '';
+  }
 }

@@ -34,13 +34,20 @@ describe('Home', () => {
     ]
   }));
 
+  it('should have default data', inject([ HomeComponent ], (home: HomeComponent) => {
+    expect(home.localState).toEqual({ value: '' });
+  }));
+
   it('should have a title', inject([ HomeComponent ], (home: HomeComponent) => {
     expect(!!home.title).toEqual(true);
   }));
 
-  it('should not output console.log', inject([ HomeComponent ], (home: HomeComponent) => {
+  it('should log ngOnInit', inject([ HomeComponent ], (home: HomeComponent) => {
     spyOn(console, 'log');
     expect(console.log).not.toHaveBeenCalled();
+
+    home.ngOnInit();
+    expect(console.log).toHaveBeenCalled();
   }));
 
 });

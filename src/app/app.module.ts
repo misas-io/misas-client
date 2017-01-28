@@ -6,8 +6,6 @@ import { RouterModule, PreloadAllModules } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 
 import { MdlModule } from 'angular2-mdl';
-import { AgmCoreModule } from 'angular2-google-maps/core';
-import { ApolloModule } from 'angular2-apollo';
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -21,11 +19,6 @@ import { HomeComponent } from './home';
 import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 import { XLarge } from './home/x-large';
-
-import { SearchComponent } from './search';
-import { MapComponent } from './map';
-import { ListComponent } from './list';
-import { getClient } from './app.client';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -49,21 +42,14 @@ type StoreType = {
     AboutComponent,
     HomeComponent,
     NoContentComponent,
-    XLarge,
-    SearchComponent,
-    MapComponent,
-    ListComponent
+    XLarge
   ],
   imports: [ // import Angular's modules
-    MdlModule,
-    AgmCoreModule.forRoot({
-      apiKey: process.env.GOOGLE_API_KEY 
-    }),
-    ApolloModule.withClient(getClient),
     BrowserModule,
     FormsModule,
     HttpModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })
+    MdlModule,
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
