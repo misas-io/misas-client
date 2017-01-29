@@ -300,11 +300,7 @@ module.exports = function (options) {
         /facade(\\|\/)math/,
         helpers.root('node_modules/@angular/core/src/facade/math.js')
       ),
-			/*
-			 *
-			 *
-			 */
-	    ],
+    ],
 
     /*
      * Include polyfills or mocks for various node stuff

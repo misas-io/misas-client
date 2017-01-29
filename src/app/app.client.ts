@@ -1,4 +1,4 @@
-import { ApolloClient, createNetworkInterface } from 'apollo-client';
+import ApolloClient, { createNetworkInterface } from 'apollo-client';
 
 const client = new ApolloClient({
   networkInterface: createNetworkInterface({
@@ -13,4 +13,4 @@ const client = new ApolloClient({
 
 export function getClient(): ApolloClient {
   return client;
-}
+};

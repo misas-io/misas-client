@@ -1,8 +1,8 @@
 import { get, isNil } from 'lodash';
 import { Component, Input, Output, OnChanges, SimpleChange, EventEmitter } from '@angular/core';
 import { OnInit } from '@angular/core';
+import { Angular2Apollo, ApolloQueryObservable} from 'angular2-apollo';
 import { ApolloQueryResult } from 'apollo-client';
-import { Angular2Apollo, ApolloQueryObservable } from 'angular2-apollo';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { SearchFieldsObserver } from '../services/search-fields-observer';
@@ -51,7 +51,7 @@ query SearchGrps(
   selector: 'grps-search', 
   styleUrls: [ './search.component.css' ],
   templateUrl: './search.component.html',
-  providers: [Angular2Apollo, SearchFieldsObserver]
+  providers: [ SearchFieldsObserver ],
 })
 export class SearchComponent implements OnInit, OnChanges {
   @Input('queryBounds') queryBounds: Number[][];
