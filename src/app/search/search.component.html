@@ -40,7 +40,6 @@
         <!-- being short options -->
         <!-- end short options -->
         <!-- begin all search options DESKTOP -->
-        <!--
         <div *hideItBootstrap="['xs']">
           <div *ngIf="searchOptions.showAllOptions" id="search-options" class="mdl-cell mdl-cell--12-col">
             <div class="mdl-grid mdl-cell--no-spacing">
@@ -74,10 +73,9 @@
             </div>  
           </div>
         </div>
-        -->
         <!-- end all search options -->
         <!-- begin all search options DESKTOP -->
-        <div *showItBootstrap="['xs','sm']">
+        <div *showItBootstrap="['xs']">
           <div *ngIf="searchOptions.showAllOptions" id="search-options"> 
             <mdl-select [(ngModel)]="searchModel.sort_by" [placeholder]="Orden" [style.width.%]="100">
               <mdl-option *ngFor="let sortOption of sortOptions" [value]="sortOption.value">{{sortOption.title}}</mdl-option>

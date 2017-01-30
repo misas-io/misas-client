@@ -75,7 +75,7 @@ export class SearchComponent implements OnInit, OnChanges {
       value: 'BEST'
     },
     {
-      title: 'Nombre Relevante',
+      title: 'Relevante',
       value: 'RELEVANCE'
     },
     {
