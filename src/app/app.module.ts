@@ -1,4 +1,5 @@
 import { NgModule, ApplicationRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -7,6 +8,7 @@ import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularcla
 import { MdlModule } from 'angular2-mdl';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import { ApolloModule } from 'angular2-apollo';
+import { ResponsiveModule, ResponsiveConfig, ResponsiveConfigInterface } from 'ng2-responsive';
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -25,6 +27,10 @@ import { XLarge } from './home/x-large';
 import { SearchComponent } from './search';
 import { MapComponent } from './map';
 import { ListComponent } from './list';
+import { MdlSelectModule } from '@angular2-mdl-ext/select';
+import { MdlPopoverModule } from '@angular2-mdl-ext/popover';
+
+import '../styles/styles.scss';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -36,6 +42,17 @@ type StoreType = {
   state: InternalStateType,
   restoreInputValues: () => void,
   disposeOldHosts: () => void
+};
+
+let config: ResponsiveConfigInterface = {
+  breakPoints: {
+    xs: {max: 500},
+    sm: {min: 501, max: 600},
+    md: {min: 601, max: 1279},
+    lg: {min: 1280, max: 1919},
+    xl: {min: 1920}
+  },
+  debounceTime: 100 // allow to debounce checking timer
 };
 
 /**
@@ -55,10 +72,14 @@ type StoreType = {
   ],
   imports: [ // import Angular's modules
     BrowserModule,
+    CommonModule,
     FormsModule,
     HttpModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
+    ResponsiveModule,
     MdlModule,
+    MdlPopoverModule,
+    MdlSelectModule,
     AgmCoreModule.forRoot({
       apiKey: process.env.GOOGLE_API_KEY 
     }),
@@ -66,7 +87,8 @@ type StoreType = {
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
-    APP_PROVIDERS
+    APP_PROVIDERS,
+    {provide: ResponsiveConfig, useFactory: () => new ResponsiveConfig(config) },
   ]
 })
 export class AppModule {

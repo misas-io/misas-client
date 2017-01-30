@@ -107,7 +107,7 @@ export class SearchComponent implements OnInit, OnChanges {
   private searchOptions: any = {
     showAllOptions: true,
   };
-  searchModel: any = {
+  public searchModel: any = {
     name: '',
     city: '',
     state: '',
@@ -117,7 +117,7 @@ export class SearchComponent implements OnInit, OnChanges {
     useMap: true,
     sort_by: "BEST",
     polygon: null,
-    event_types: {},
+    event_types: [],
   };
 
   constructor(private apollo: Angular2Apollo, private searchFields: SearchFieldsObserver) {};

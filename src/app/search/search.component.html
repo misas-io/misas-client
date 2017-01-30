@@ -1,4 +1,3 @@
-<form (ngSubmit)="onSubmit()" #srchGrpsForm="ngForm">
   <div class="mdl-grid" mdl-shadow="4">
     <div class="mdl-cell mdl-cell--12-col mdl-cell--4-phone">
       <div id="search-header" class="mdl-grid mdl-grid--no-spacing">
@@ -40,40 +39,55 @@
         </div>
         <!-- being short options -->
         <!-- end short options -->
-        <!-- begin all search options -->
-        <div *ngIf="searchOptions.showAllOptions" id="search-options" class="mdl-cell mdl-cell--12-col">
-          <div class="mdl-grid mdl-cell--no-spacing">
-            <div class="mdl-cell mdl-cell--2-col mdl-cell--1-offset">
-              <div class="mdl-grid mdl-grid--no-spacing">
-                <div class="mdl-cell mdl-cell--12-col">
-                  <h6>Ordenar por</h6>
+        <!-- begin all search options DESKTOP -->
+        <!--
+        <div *hideItBootstrap="['xs']">
+          <div *ngIf="searchOptions.showAllOptions" id="search-options" class="mdl-cell mdl-cell--12-col">
+            <div class="mdl-grid mdl-cell--no-spacing">
+              <div class="mdl-cell mdl-cell--2-col mdl-cell--1-offset">
+                <div class="mdl-grid mdl-grid--no-spacing">
+                  <div class="mdl-cell mdl-cell--12-col">
+                    <h6>Ordenar por</h6>
+                  </div>
+                  <div *ngFor="let sortOption of sortOptions" class="mdl-cell mdl-cell--11-col mdl-cell--1-offset">
+                    <mdl-radio name="sort_by" 
+                               value="{{sortOption.value}}" 
+                               [(ngModel)]="searchModel.sort_by" 
+                               (ngModelChange)="refreshSearch()" 
+                               mdl-ripple>{{sortOption.title}}
+                    </mdl-radio>
+                  </div>
                 </div>
-                <div *ngFor="let sortOption of sortOptions" class="mdl-cell mdl-cell--11-col mdl-cell--1-offset">
-                  <mdl-radio name="sort_by" 
-                             value="{{sortOption.value}}" 
-                             [(ngModel)]="searchModel.sort_by" 
-                             (ngModelChange)="refreshSearch()" 
-                             mdl-ripple>{{sortOption.title}}
-                  </mdl-radio>
+              </div>  
+              <div class="mdl-cell mdl-cell--2-col">
+                <div class="mdl-grid mdl-grid--no-spacing">
+                  <div class="mdl-cell mdl-cell--12-col">
+                    <h6>Tipo de evento</h6>
+                  </div>
+                  <div *ngFor="let eventType of eventTypes" class="mdl-cell mdl-cell--11-col mdl-cell--1-offset">
+                    <mdl-checkbox name="{{eventType.value}}" value="true" [(ngModel)]="searchModel.event_types[eventType.value]">
+                      {{ eventType.name }}
+                    </mdl-checkbox>
+                  </div>
                 </div>
               </div>
             </div>  
-            <div class="mdl-cell mdl-cell--2-col">
-              <div class="mdl-grid mdl-grid--no-spacing">
-                <div class="mdl-cell mdl-cell--12-col">
-                  <h6>Tipo de evento</h6>
-                </div>
-                <div *ngFor="let eventType of eventTypes" class="mdl-cell mdl-cell--11-col mdl-cell--1-offset">
-                  <mdl-checkbox name="{{eventType.value}}" value="true" [(ngModel)]="searchModel.event_types[eventType.value]">
-                    {{ eventType.name }}
-                  </mdl-checkbox>
-                </div>
-              </div>
-            </div>
-          </div>  
+          </div>
         </div>
+        -->
+        <!-- end all search options -->
+        <!-- begin all search options DESKTOP -->
+        <div *showItBootstrap="['xs','sm']">
+          <div *ngIf="searchOptions.showAllOptions" id="search-options"> 
+            <mdl-select [(ngModel)]="searchModel.sort_by" [placeholder]="Orden" [style.width.%]="100">
+              <mdl-option *ngFor="let sortOption of sortOptions" [value]="sortOption.value">{{sortOption.title}}</mdl-option>
+            </mdl-select>
+            <mdl-select [(ngModel)]="searchModel.event_type" [multiple]="true" placeholder="Evento">
+              <mdl-option *ngFor="let eventType of eventTypes" [value]="eventType.value">{{eventType.name}}</mdl-option>
+            </mdl-select>
+          </div>
+        </div> 
         <!-- end all search options -->
       </div>
     </div>
   </div>
-</form>

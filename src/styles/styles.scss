@@ -1,0 +1,14 @@
+/* this file will be extracted to main dist folder and is imported in index.html */
+/* This file is for setting global styles  */
+@import './../../node_modules/angular2-mdl/scss/color-definitions';
+
+$color-primary: $palette-purple-500;
+$color-primary-dark: $palette-purple-A200;
+$color-accent: $palette-yellow-A400;
+$color-primary-contrast: $color-dark-contrast;
+$color-accent-contrast: $color-dark-contrast;
+
+@import './../../node_modules/angular2-mdl/scss/material-design-lite';
+@import './../../node_modules/@angular2-mdl-ext/popover/popover';
+@import './../../node_modules/@angular2-mdl-ext/select/select';
+
