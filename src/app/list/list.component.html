@@ -17,7 +17,7 @@
 			</div>
 			<div class="mdl-grid">
 				<span class="mdl-cell mdl-cell--12-col">Siguientes misas:
-      		<mdl-chip *ngFor="let event of grp.node.nextEvents" mdl-label="{{event}}"></mdl-chip>
+      		<mdl-chip *ngFor="let event of grp.node.nextEvents" mdl-label="{{ event | localeDate: 'h:mmA, ddd D [de] MMM ' }}"></mdl-chip>
 				</span>
 			</div>
 		</mdl-card-supporting-text>

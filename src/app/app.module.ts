@@ -29,6 +29,7 @@ import { MapComponent } from './map';
 import { ListComponent } from './list';
 import { MdlSelectModule } from '@angular2-mdl-ext/select';
 import { MdlPopoverModule } from '@angular2-mdl-ext/popover';
+import { LocaleDate } from './pipes/locale.date';
 
 import '../styles/styles.scss';
 
@@ -68,7 +69,8 @@ let config: ResponsiveConfigInterface = {
     XLarge,
     SearchComponent,
     MapComponent,
-    ListComponent
+    ListComponent,
+    LocaleDate,
   ],
   imports: [ // import Angular's modules
     BrowserModule,
