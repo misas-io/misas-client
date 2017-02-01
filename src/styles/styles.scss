@@ -8,6 +8,12 @@ $color-accent: $palette-yellow-A400;
 $color-primary-contrast: $color-dark-contrast;
 $color-accent-contrast: $color-light-contrast;
 
+// desktops are md
+$grid-desktop-breakpoint: 870px;
+// tablets are sm
+$grid-tablet-breakpoint: 510px;
+// phones are xs
+
 @import './../../node_modules/angular2-mdl/scss/material-design-lite';
 @import './../../node_modules/@angular2-mdl-ext/popover/popover';
 @import './../../node_modules/@angular2-mdl-ext/select/select';

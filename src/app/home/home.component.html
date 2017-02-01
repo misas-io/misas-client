@@ -8,17 +8,17 @@
                (currentLocation)="currentLocation"
                [queryBounds]="queryBounds">
   </grps-search>
-  <div class="mdl-cell mdl-cell--1-col mdl-cell--hide-phone">
+  <div class="mdl-cell mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone">
   </div>
   <!-- this add offset only in non-phone mode -->
-  <div class="mdl-cell mdl-cell--1-col mdl-cell--hide-phone">
+  <div class="mdl-cell mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone">
   </div>
   <!-- list of grps -->
-  <div class="mdl-cell mdl-cell--5-col">
+  <div class="mdl-cell mdl-cell--5-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
     <grps-list [grps]="grps"></grps-list>
   </div>
   <!-- map showing grps -->
-  <div mdl-shadow="2" class="mdl-cell mdl-cell--5-col home-map-container">
+  <div mdl-shadow="2" class="mdl-cell mdl-cell--5-col mdl-cell--4-col-tablet mdl-cell--4-col-phone home-map-container">
     <grps-map [grps]="grps" 
               [currentLocation]="currentLocation"
               (boundsChanged)="queryBounds">

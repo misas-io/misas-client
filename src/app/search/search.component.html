@@ -1,9 +1,9 @@
   <div class="mdl-grid" mdl-shadow="4">
     <div class="mdl-cell mdl-cell--12-col mdl-cell--4-phone">
-      <div id="search-header" class="mdl-grid mdl-grid--no-spacing">
-        <div class="mdl-cell mdl-cell--1-col mdl-cell--hide-phone">
+      <div id="search-header" class="mdl-grid">
+        <div class="mdl-cell mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone">
         </div>
-        <div class="mdl-cell mdl-cell--5-col mdl-cell--4-phone">
+        <div class="mdl-cell mdl-cell--5-col mdl-cell--3-col-tablet mdl-cell--4-col-phone">
           <mdl-textfield 
              type="text" 
              label="Nombre de la Parroquias o Iglesia" 
@@ -11,7 +11,7 @@
              [(ngModel)]="searchModel.name">
           </mdl-textfield>
         </div>
-        <div class="mdl-cell mdl-cell--3-col mdl-cell--4-phone">
+        <div class="mdl-cell mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--4-col-phone">
           <mdl-textfield
              type="text"
              label="Ciudad, Estado"
@@ -19,7 +19,7 @@
              [(ngModel)]="searchModel.location">
           </mdl-textfield>
         </div>
-        <div class="mdl-cell mdl-cell--3-col mdl-cell--top">
+        <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-cell--top">
           <button
              mdl-button
              mdl-button-type="raised"
@@ -40,7 +40,7 @@
         <!-- being short options -->
         <!-- end short options -->
         <!-- begin all search options DESKTOP -->
-        <div *hideItBootstrap="['xs']">
+        <div *hideItBootstrap="['xs','sm']">
           <div *ngIf="searchOptions.showAllOptions" id="search-options" class="mdl-cell mdl-cell--12-col">
             <div class="mdl-grid mdl-cell--no-spacing">
               <div class="mdl-cell mdl-cell--2-col mdl-cell--1-offset">
@@ -75,14 +75,20 @@
         </div>
         <!-- end all search options -->
         <!-- begin all search options DESKTOP -->
-        <div *showItBootstrap="['xs']">
+        <div *showItBootstrap="['xs','sm']">
           <div *ngIf="searchOptions.showAllOptions" id="search-options"> 
-            <mdl-select [(ngModel)]="searchModel.sort_by" [placeholder]="Orden" [style.width.%]="100">
-              <mdl-option *ngFor="let sortOption of sortOptions" [value]="sortOption.value">{{sortOption.title}}</mdl-option>
-            </mdl-select>
-            <mdl-select [(ngModel)]="searchModel.event_type" [multiple]="true" placeholder="Evento">
-              <mdl-option *ngFor="let eventType of eventTypes" [value]="eventType.value">{{eventType.name}}</mdl-option>
-            </mdl-select>
+            <div class="mdl-grid">
+              <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
+                <mdl-select [(ngModel)]="searchModel.sort_by" (ngModelChange)="refreshSearch()" [placeholder]="Orden" [style.width.%]="100">
+                  <mdl-option *ngFor="let sortOption of sortOptions" [value]="sortOption.value">{{sortOption.title}}</mdl-option>
+                </mdl-select>
+              </div>
+              <div class="mdl-cell mdl-cell--6-col mdl-cell--3-col-tablet mdl-cell--4-col-phone">
+                <mdl-select [(ngModel)]="searchModel.event_type" [multiple]="true" placeholder="Evento">
+                  <mdl-option *ngFor="let eventType of eventTypes" [value]="eventType.value">{{eventType.name}}</mdl-option>
+                </mdl-select>
+              </div>
+            </div>
           </div>
         </div> 
         <!-- end all search options -->

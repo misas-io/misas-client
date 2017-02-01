@@ -47,9 +47,9 @@ type StoreType = {
 
 let config: ResponsiveConfigInterface = {
   breakPoints: {
-    xs: {max: 500},
-    sm: {min: 501, max: 600},
-    md: {min: 601, max: 1279},
+    xs: {max: 509},
+    sm: {min: 510, max: 869},
+    md: {min: 870, max: 1279},
     lg: {min: 1280, max: 1919},
     xl: {min: 1920}
   },
