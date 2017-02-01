@@ -1,8 +1,8 @@
 import { get, isNil } from 'lodash';
 import { Component, Input, Output, OnChanges, SimpleChange, EventEmitter } from '@angular/core';
 import { OnInit } from '@angular/core';
+import { Angular2Apollo, ApolloQueryObservable} from 'angular2-apollo';
 import { ApolloQueryResult } from 'apollo-client';
-import { Angular2Apollo, ApolloQueryObservable } from 'angular2-apollo';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { SearchFieldsObserver } from '../services/search-fields-observer';
@@ -29,8 +29,10 @@ query SearchGrps(
         ... on Grp {
           name
           address {
+            address_line_1
             city
             state
+            postal_code
           }
           nextEvents(next: 5)
           distance
@@ -49,7 +51,7 @@ query SearchGrps(
   selector: 'grps-search', 
   styleUrls: [ './search.component.css' ],
   templateUrl: './search.component.html',
-  providers: [Angular2Apollo, SearchFieldsObserver]
+  providers: [ SearchFieldsObserver ],
 })
 export class SearchComponent implements OnInit, OnChanges {
   @Input('queryBounds') queryBounds: Number[][];
@@ -73,7 +75,7 @@ export class SearchComponent implements OnInit, OnChanges {
       value: 'BEST'
     },
     {
-      title: 'Nombre Relevante',
+      title: 'Relevante',
       value: 'RELEVANCE'
     },
     {
@@ -105,7 +107,7 @@ export class SearchComponent implements OnInit, OnChanges {
   private searchOptions: any = {
     showAllOptions: true,
   };
-  searchModel: any = {
+  public searchModel: any = {
     name: '',
     city: '',
     state: '',
@@ -115,7 +117,7 @@ export class SearchComponent implements OnInit, OnChanges {
     useMap: true,
     sort_by: "BEST",
     polygon: null,
-    event_types: {},
+    event_types: [],
   };
 
   constructor(private apollo: Angular2Apollo, private searchFields: SearchFieldsObserver) {};
@@ -165,11 +167,11 @@ export class SearchComponent implements OnInit, OnChanges {
       query: query,
       variables: this.searchModel
     }).subscribe(
-      ({data}) => {
+      ({data}: { data: any }) => {
         console.log('search.component: new search data!');
         this.grps = data.searchGrps;
         console.log(this.grps);
-        this.loading = data.loading;
+        this.loading = true;
 
         this.searchModel.point = point;
         this.searchModel.name = name;
@@ -186,4 +188,4 @@ export class SearchComponent implements OnInit, OnChanges {
     console.log('search.component: refreshing search');
     this.query();
   };
-}
+};

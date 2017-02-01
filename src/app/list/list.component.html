@@ -10,11 +10,14 @@
 		</mdl-card-title>
 		<mdl-card-supporting-text>
 			<div class="mdl-grid">
-      	<span class="mdl-cell mdl-cell--12-col">{{ grp.node.address.city }}, {{ grp.node.address.state }}</span>
+        <p>
+          {{ grp.node.address.address_line_1 }}
+          {{ grp.node.address.city }}, {{ grp.node.address.state }}, {{ grp.node.address.postal_code }}
+        </p>
 			</div>
 			<div class="mdl-grid">
 				<span class="mdl-cell mdl-cell--12-col">Siguientes misas:
-      		<mdl-chip *ngFor="let event of grp.node.nextEvents" mdl-label="{{event}}"></mdl-chip>
+      		<mdl-chip *ngFor="let event of grp.node.nextEvents" mdl-label="{{ event | localeDate: 'h:mmA, ddd D [de] MMM ' }}"></mdl-chip>
 				</span>
 			</div>
 		</mdl-card-supporting-text>

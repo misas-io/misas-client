@@ -1,7 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { get } from 'lodash';
-import {Angular2Apollo, ApolloQueryObservable} from 'angular2-apollo';
-import gql from 'graphql-tag';
 import { Subscription } from 'rxjs/Subscription';
 import { AppState } from '../app.service';
 import { Title } from './title';
