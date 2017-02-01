@@ -28,7 +28,8 @@ const HMR = helpers.hasProcessFlag('hot');
 const METADATA = {
   title: 'Misas',
   baseUrl: '/',
-  isDevServer: helpers.isWebpackDevServer()
+  isDevServer: helpers.isWebpackDevServer(),
+  isProd: process.env.NODE_ENV === 'production',
 };
 
 /*
@@ -39,7 +40,6 @@ const METADATA = {
 module.exports = function (options) {
   isProd = options.env === 'production';
   return {
-
     /*
      * Cache generated modules and chunks to improve performance for multiple incremental builds.
      * This is enabled by default in watch mode.

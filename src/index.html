@@ -37,7 +37,11 @@
     r=n.getElementsByTagName(g)[0];a.async=1;a.src=u;r.parentNode.insertBefore(a,r)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-71073175-1', 'auto');
+<% if (htmlWebpackPlugin.options.metadata.isProd) { %>
+      ga('create', 'UA-91185310-2', 'auto');
+<% } else { %>
+      ga('create', 'UA-91185310-1', 'auto');
+<% } %>
     ga('send', 'pageview');
   </script>
 
