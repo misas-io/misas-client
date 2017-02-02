@@ -3429,9 +3429,9 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
-ng2-responsive@^0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/ng2-responsive/-/ng2-responsive-0.7.2.tgz#60144d61944e34d3498b26c41704b4ba4e71db30"
+ng2-responsive@0.4.6:
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/ng2-responsive/-/ng2-responsive-0.4.6.tgz#bac03b0d7fa8163fa45a22c3fff07c0e56f3b7ad"
 
 no-case@^2.2.0:
   version "2.3.0"
