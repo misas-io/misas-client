@@ -1,24 +1,14 @@
 import { NgModule, ApplicationRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, PreloadAllModules } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
-
 import { MdlModule } from 'angular2-mdl';
 import { AgmCoreModule } from 'angular2-google-maps/core';
-import ApolloClient, { createNetworkInterface } from 'apollo-client';
 import { ApolloModule } from 'angular2-apollo';
-
-// Create the client
-const client = new ApolloClient({
-  networkInterface: createNetworkInterface({
-    uri: 'http://dev.api.misas.io/graphql'
-  })
-});
-
-
-
+import { ResponsiveModule, ResponsiveConfig, ResponsiveConfigInterface } from 'ng2-responsive';
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -26,12 +16,22 @@ import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
 // App is our top level component
 import { AppComponent } from './app.component';
+import { getClient } from './app.client';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 import { HomeComponent } from './home';
 import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 import { XLarge } from './home/x-large';
+
+import { SearchComponent } from './search';
+import { MapComponent } from './map';
+import { ListComponent } from './list';
+import { MdlSelectModule } from '@angular2-mdl-ext/select';
+import { MdlPopoverModule } from '@angular2-mdl-ext/popover';
+import { LocaleDate } from './pipes/locale.date';
+
+import '../styles/styles.scss';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -45,6 +45,17 @@ type StoreType = {
   disposeOldHosts: () => void
 };
 
+let config: ResponsiveConfigInterface = {
+  breakPoints: {
+    xs: {max: 509},
+    sm: {min: 510, max: 869},
+    md: {min: 870, max: 1279},
+    lg: {min: 1280, max: 1919},
+    xl: {min: 1920}
+  },
+  debounceTime: 100 // allow to debounce checking timer
+};
+
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
@@ -55,22 +66,31 @@ type StoreType = {
     AboutComponent,
     HomeComponent,
     NoContentComponent,
-    XLarge
+    XLarge,
+    SearchComponent,
+    MapComponent,
+    ListComponent,
+    LocaleDate,
   ],
   imports: [ // import Angular's modules
-    MdlModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyAVJCZOn1762Trea50QIVds0RXf2m-_7Ek'
-    }),
-    ApolloModule.withClient(client),
     BrowserModule,
+    CommonModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
+    ResponsiveModule,
+    MdlModule,
+    MdlPopoverModule,
+    MdlSelectModule,
+    AgmCoreModule.forRoot({
+      apiKey: process.env.GOOGLE_API_KEY 
+    }),
+    ApolloModule.withClient(getClient),
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
-    APP_PROVIDERS
+    APP_PROVIDERS,
+    {provide: ResponsiveConfig, useFactory: () => new ResponsiveConfig(config) },
   ]
 })
 export class AppModule {

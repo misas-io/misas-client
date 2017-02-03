@@ -1,7 +1,7 @@
 /*
  * Angular 2 decorators and services
  */
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 
 import { AppState } from './app.service';
 
@@ -17,13 +17,14 @@ import { AppState } from './app.service';
   ],
   template: `
 <mdl-layout mdl-layout-fixed-header mdl-layout-header-seamed>
-    <mdl-layout-header>
+    <mdl-layout-header mdl-shadow="2">
       <mdl-layout-header-row>
         <mdl-layout-title [routerLink]=" ['./'] ">Misas.io</mdl-layout-title>
         <mdl-layout-spacer></mdl-layout-spacer>
         <!-- Navigation. We hide it in small screens. -->
         <mdl-textfield type="text" [(ngModel)]="text6" icon="search"></mdl-textfield>
         <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <!--
           <a class="mdl-navigation__link" [routerLink]=" ['./misas'] ">
             MISAS
           </a>
@@ -33,6 +34,10 @@ import { AppState } from './app.service';
           <a class="mdl-navigation__link" [routerLink]=" ['./parroquias'] ">
             PARROQUIAS
           </a>
+          -->
+          <button mdl-button mdl-button-type="raised" mdl-ripple mdl-colored="accent">
+            QUIERO IR A MISA
+          </button>
         </nav>
       </mdl-layout-header-row>
     </mdl-layout-header>
@@ -83,23 +88,17 @@ import { AppState } from './app.service';
   </mdl-layout>
   `
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   angularclassLogo = 'assets/img/angularclass-avatar.png';
   name = 'Angular 2 Webpack Starter';
   url = 'https://twitter.com/AngularClass';
   copyYear: number;
-
-  constructor(
-    public appState: AppState) {
-
-  }
+  constructor(public appState: AppState) {}
 
   ngOnInit() {
     console.log('Initial App State', this.appState.state);
-
     this.copyYear = new Date().getFullYear();
   }
-
 }
 
 /*
