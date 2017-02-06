@@ -240,12 +240,6 @@ angular-router-loader@^0.4.0:
   dependencies:
     loader-utils "^0.2.15"
 
-angular2-apollo@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/angular2-apollo/-/angular2-apollo-0.9.0.tgz#87fdb1e0b2d0680f78a10292dd874892e171af71"
-  dependencies:
-    apollo-client-rxjs "~0.4.1"
-
 angular2-google-maps@^0.17.0:
   version "0.17.0"
   resolved "https://registry.yarnpkg.com/angular2-google-maps/-/angular2-google-maps-0.17.0.tgz#ad8366fa4e5c56de0b8b20f003b5f7a1da06ffe3"
@@ -289,9 +283,15 @@ anymatch@^1.3.0:
     arrify "^1.0.0"
     micromatch "^2.1.5"
 
-apollo-client-rxjs@~0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/apollo-client-rxjs/-/apollo-client-rxjs-0.4.1.tgz#ad9ef95bdbb44559124f390db1fd0ffb195181a4"
+apollo-angular@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/apollo-angular/-/apollo-angular-0.11.0.tgz#57da1f5bc3472c18d8c061ba544c2d1e0ac0f405"
+  dependencies:
+    apollo-client-rxjs "~0.5.0"
+
+apollo-client-rxjs@~0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/apollo-client-rxjs/-/apollo-client-rxjs-0.5.0.tgz#fdf6a61431c78e23eccbb5bfa431b7eae4d682b0"
   dependencies:
     lodash "^4.17.2"
 

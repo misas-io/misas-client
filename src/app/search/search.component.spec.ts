@@ -1,3 +1,4 @@
+/*
 import {
   inject,
   TestBed
@@ -6,7 +7,6 @@ import util from 'util';
 import { Angular2Apollo, ApolloQueryObservable } from 'angular2-apollo';
 import ApolloClient, {createBatchingNetworkInterface} from 'apollo-client';
 import { SearchComponent } from './search.component';
-/*
 describe('Search', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [

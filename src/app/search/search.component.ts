@@ -1,51 +1,19 @@
 import { get, isNil } from 'lodash';
 import { Component, Input, Output, OnChanges, SimpleChange, EventEmitter } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { Angular2Apollo, ApolloQueryObservable} from 'angular2-apollo';
-import { ApolloQueryResult } from 'apollo-client';
+import { Apollo, ApolloQueryObservable} from 'apollo-angular';
+import { ApolloQueryResult, ObservableQuery } from 'apollo-client';
+import { RxObservableQuery } from 'apollo-client-rxjs';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { SearchFieldsObserver } from '../services/search-fields-observer';
-import gql from 'graphql-tag';
+import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import 'rxjs/add/operator/map';
 
-const query = gql`
-query SearchGrps(
-  $name: String, 
-  $point: PointI, 
-  $polygon: PolygonI,
-  $sort_by: SortTypes
-)
-{
-  searchGrps(
-    sortBy: $sort_by,
-    name: $name,
-    point: $point,
-    polygon: $polygon
-  )
-  {
-    edges {
-      node {
-        id
-        ... on Grp {
-          name
-          address {
-            address_line_1
-            city
-            state
-            postal_code
-          }
-          nextEvents(next: 5)
-          distance
-          location {
-            type
-            coordinates
-          }
-        }
-      }
-    }
-  }
-}
-`;
+import { SearchFieldsObserver } from '../services/search-fields-observer';
+import { SortOptions, EventTypeOptions } from './search.component.options';
+import { SearchGrps } from './search.model';
 
 @Component({
   selector: 'grps-search', 
@@ -53,15 +21,28 @@ query SearchGrps(
   templateUrl: './search.component.html',
   providers: [ SearchFieldsObserver ],
 })
-export class SearchComponent implements OnInit, OnChanges {
+export class SearchComponent implements OnInit {
   @Input('queryBounds') queryBounds: Number[][];
-  @Output('boundsChanged') bounds = new EventEmitter<Number[][]>();
   @Output() currentLocation: any = new EventEmitter<any>();
+	// form properties
+	public searchForm: FormGroup;
+  /*
+	public point: any = {
+		coordinates: [-106.43022537231445, 31.721012524697652],
+	};
+  */
+  public loading = true;
+  public searchOptions: BehaviorSubject<any> = new BehaviorSubject<any>({
+    sort_by: 'RELEVANCE'
+  });
+  public point: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  public sortBy: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  public grpsObs: ApolloQueryObservable<any>;
   // grps property
   grpsValue: any;
   @Output()
   grpsChange: EventEmitter<any> = new EventEmitter<any>();
-  @Input()
+	@Input()
   get grps(): any {
     return this.grpsValue;
   };
@@ -69,62 +50,56 @@ export class SearchComponent implements OnInit, OnChanges {
     this.grpsValue = value;
     this.grpsChange.emit(this.grpsValue);
   };
-  private sortOptions: any[] = [
-    {
-      title: 'Mejor',
-      value: 'BEST'
-    },
-    {
-      title: 'Relevante',
-      value: 'RELEVANCE'
-    },
-    {
-      title: 'Cercana',
-      value: 'NEAR'
-    },
-    {
-      title: 'Temprano',
-      value: 'TIME'
-    },
-  ];
-  private eventTypes: any[] = [
-    {
-      name: 'Misa',
-      value: 'misa'
-    }, 
-    {
-      name: 'Confesion',
-      value: 'confesion'
-    }, 
-    {
-      name: 'Evento',
-      value: 'evento'
-    }, 
-  ];
-  private eventType: any[];
-  private loading: boolean;
+  public sortOptions: any[] = SortOptions;
+  public eventTypes: any[] = EventTypeOptions;
   private searchArea: any = null;
-  private searchOptions: any = {
-    showAllOptions: true,
-  };
-  public searchModel: any = {
-    name: '',
-    city: '',
-    state: '',
-    point: {
-		  coordinates: [-106.43022537231445, 31.721012524697652],
-    },
-    useMap: true,
-    sort_by: "BEST",
-    polygon: null,
-    event_types: [],
-  };
+  private advOptions = false;
 
-  constructor(private apollo: Angular2Apollo, private searchFields: SearchFieldsObserver) {};
+	constructor(
+		private apollo: Apollo, 
+		private searchFields: SearchFieldsObserver, 
+		private fb: FormBuilder
+	) {
+		this.grps = [];
+		this.searchForm = this.fb.group({
+			name: '',
+			city: '',
+			state: '',
+			useMap: true,
+			sortBy: "BEST",
+			polygon: null,
+			location: ''
+		});
+    // setup search grps 
+    this.grpsObs = this.apollo.watchQuery({
+      query: SearchGrps,
+      variables: {},
+    });
+    this.grpsObs.subscribe(
+      ({data, loading}) => {
+        this.grps = get(data,'searchGrps', null);
+        this.loading = loading;
+        console.log('got result');
+      }
+    );
+    this.grpsObs.refetch({
+      sort_by: 'BEST'
+    });
+    /*
+    this.searchOptions.subscribe((options) => {
+      console.log(this.grpsObs);
+      if (this.grps && this.grpsObs && this.grpsObs instanceof RxObservableQuery) {
+        console.log(this.grpsObs.refetch);
+        this.grpsObs.refetch(options);
+        console.log('is instance');
+      }
+      console.log('options where updated to ');
+    });
+   */
+  };
 
   ngOnInit(): void {
-    console.log('search.component: initializing');
-    this.query();
+    // setup to get current location 
     this.searchFields.fieldEvents((result) => {
       if (!result || !(result.location))
         return;
@@ -135,17 +110,15 @@ export class SearchComponent implements OnInit, OnChanges {
         console.log(`search.component: got new coordinates [${lon}, ${lat}]`);
         let currentLocation = { coordinates: [lon, lat] };
         this.currentLocation.emit(currentLocation);
-        this.searchModel.point = currentLocation;
-        this.refreshSearch();
+        this.searchOptions.next({
+          point: currentLocation,
+          sort_by: 'BEST'
+        });
       }
     });
   };
 
-  onSubmit() {
-    console.log('search.component: research');
-    this.refreshSearch();
-  };
-
+	/*
   ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
     if (changes['queryBounds'] && !isNil(this.queryBounds)) {
       this.searchArea = {
@@ -153,39 +126,24 @@ export class SearchComponent implements OnInit, OnChanges {
       };
     }
   };
+	*/
+
+  getFormFieldObserver(name: string): Observable<any> {
+    return this.searchForm
+      .get(name)
+      .valueChanges;
+  };
 
   query() {
-    let point = this.searchModel.point;
+    /*
+		let point = this.searchModel.point;
     let name = this.searchModel.name;
     let sort_by = this.searchModel.sort_by;
     if (sort_by === "RELEVANCE") {
       this.searchModel.point = null;
     } else { 
       this.searchModel.name = null;
-    }
-    this.apollo.query({
-      query: query,
-      variables: this.searchModel
-    }).subscribe(
-      ({data}: { data: any }) => {
-        console.log('search.component: new search data!');
-        this.grps = data.searchGrps;
-        console.log(this.grps);
-        this.loading = true;
-
-        this.searchModel.point = point;
-        this.searchModel.name = name;
-      }, (error) => {
-        console.log('search.component: error querying');
-        console.log(error);
-        this.searchModel.point = point;
-        this.searchModel.name = name;
-      }
-    );
-  };
-
-  refreshSearch() {
-    console.log('search.component: refreshing search');
-    this.query();
+    } 
+		*/
   };
 };

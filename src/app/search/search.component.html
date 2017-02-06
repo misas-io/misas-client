@@ -1,3 +1,4 @@
+<form [formGroup]="searchForm" novalidate>
   <div class="mdl-grid" mdl-shadow="4">
     <div class="mdl-cell mdl-cell--12-col mdl-cell--4-phone">
       <div id="search-header" class="mdl-grid">
@@ -7,16 +8,14 @@
           <mdl-textfield 
              type="text" 
              label="Nombre de la Parroquias o Iglesia" 
-             name="name" 
-             [(ngModel)]="searchModel.name">
+             formControlName="name">
           </mdl-textfield>
         </div>
         <div class="mdl-cell mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--4-col-phone">
           <mdl-textfield
              type="text"
              label="Ciudad, Estado"
-             name="location"
-             [(ngModel)]="searchModel.location">
+             formControlName="location">
           </mdl-textfield>
         </div>
         <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--2-col-phone mdl-cell--top">
@@ -34,7 +33,7 @@
              mdl-ripple
              (click)="searchOptions.showAllOptions=!searchOptions.showAllOptions"
              >
-            Mas Opciones 
+             Mas Opciones 
           </button>
         </div>
         <!-- being short options -->
@@ -49,15 +48,14 @@
                     <h6>Ordenar por</h6>
                   </div>
                   <div *ngFor="let sortOption of sortOptions" class="mdl-cell mdl-cell--11-col mdl-cell--1-offset">
-                    <mdl-radio name="sort_by" 
-                               value="{{sortOption.value}}" 
-                               [(ngModel)]="searchModel.sort_by" 
-                               (ngModelChange)="refreshSearch()" 
+                    <mdl-radio value="{{sortOption.value}}" 
+                               formControlName="sortBy" 
                                mdl-ripple>{{sortOption.title}}
                     </mdl-radio>
                   </div>
                 </div>
               </div>  
+              <!--
               <div class="mdl-cell mdl-cell--2-col">
                 <div class="mdl-grid mdl-grid--no-spacing">
                   <div class="mdl-cell mdl-cell--12-col">
@@ -70,6 +68,7 @@
                   </div>
                 </div>
               </div>
+              -->
             </div>  
           </div>
         </div>
@@ -79,12 +78,12 @@
           <div *ngIf="searchOptions.showAllOptions" id="search-options"> 
             <div class="mdl-grid">
               <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
-                <mdl-select [(ngModel)]="searchModel.sort_by" (ngModelChange)="refreshSearch()" [placeholder]="Orden" [style.width.%]="100">
+                <mdl-select formControlName="sortBy" [placeholder]="Orden" [style.width.%]="100">
                   <mdl-option *ngFor="let sortOption of sortOptions" [value]="sortOption.value">{{sortOption.title}}</mdl-option>
                 </mdl-select>
               </div>
               <div class="mdl-cell mdl-cell--6-col mdl-cell--3-col-tablet mdl-cell--4-col-phone">
-                <mdl-select [(ngModel)]="searchModel.event_type" [multiple]="true" placeholder="Evento">
+                <mdl-select formControlName="event_type" [multiple]="true" placeholder="Evento">
                   <mdl-option *ngFor="let eventType of eventTypes" [value]="eventType.value">{{eventType.name}}</mdl-option>
                 </mdl-select>
               </div>
@@ -92,6 +91,8 @@
           </div>
         </div> 
         <!-- end all search options -->
+        {{ searchForm.value | json }}
       </div>
     </div>
   </div>
+</form>
