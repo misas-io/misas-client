@@ -1,17 +1,18 @@
-import { get, isNil } from 'lodash';
+import { get, isNil, isEmpty } from 'lodash';
 import { Component, Input, Output, OnChanges, SimpleChange, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { OnInit } from '@angular/core';
 import { Apollo, ApolloQueryObservable} from 'apollo-angular';
-import { ApolloQueryResult, ObservableQuery } from 'apollo-client';
-import { RxObservableQuery } from 'apollo-client-rxjs';
+import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { RxObservableQuery } from 'apollo-client-rxjs';
 import 'rxjs/add/operator/map';
+import 'apollo-client-rxjs';
 
 import { SearchFieldsObserver } from '../services/search-fields-observer';
+import { LoadingBar } from '../services/loading-bar';
 import { SortOptions, EventTypeOptions } from './search.component.options';
 import { SearchGrps } from './search.model';
 
@@ -26,18 +27,11 @@ export class SearchComponent implements OnInit {
   @Output() currentLocation: any = new EventEmitter<any>();
 	// form properties
 	public searchForm: FormGroup;
-  /*
-	public point: any = {
-		coordinates: [-106.43022537231445, 31.721012524697652],
-	};
-  */
-  public loading = true;
-  public searchOptions: BehaviorSubject<any> = new BehaviorSubject<any>({
-    sort_by: 'RELEVANCE'
-  });
-  public point: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-  public sortBy: BehaviorSubject<string> = new BehaviorSubject<string>(null);
-  public grpsObs: ApolloQueryObservable<any>;
+  public loading = false;
+  public initial = true;
+  public searchOptions: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  private grpsObs: Observable<ApolloQueryResult<any>>;
+  private grpsSub: any;
   // grps property
   grpsValue: any;
   @Output()
@@ -52,50 +46,56 @@ export class SearchComponent implements OnInit {
   };
   public sortOptions: any[] = SortOptions;
   public eventTypes: any[] = EventTypeOptions;
-  private searchArea: any = null;
   private advOptions = false;
 
 	constructor(
+    public loadingBar: LoadingBar,
 		private apollo: Apollo, 
 		private searchFields: SearchFieldsObserver, 
 		private fb: FormBuilder
 	) {
-		this.grps = [];
+    this.loadingBar.addLoading();
+		this.grps = {};
 		this.searchForm = this.fb.group({
 			name: '',
 			city: '',
 			state: '',
 			useMap: true,
-			sortBy: "BEST",
+			sortBy: "",
 			polygon: null,
 			location: ''
 		});
     // setup search grps 
-    this.grpsObs = this.apollo.watchQuery({
-      query: SearchGrps,
-      variables: {},
-    });
-    this.grpsObs.subscribe(
-      ({data, loading}) => {
-        this.grps = get(data,'searchGrps', null);
-        this.loading = loading;
-        console.log('got result');
-      }
-    );
-    this.grpsObs.refetch({
-      sort_by: 'BEST'
-    });
-    /*
     this.searchOptions.subscribe((options) => {
-      console.log(this.grpsObs);
-      if (this.grps && this.grpsObs && this.grpsObs instanceof RxObservableQuery) {
-        console.log(this.grpsObs.refetch);
-        this.grpsObs.refetch(options);
-        console.log('is instance');
+      console.log('got new searchOptions');
+      console.log(options);
+      // check if we got any options
+      if (isNil(options) || isEmpty(options)){
+        this.grps = {};
+        return;
       }
-      console.log('options where updated to ');
+      // unsubscribe from previous query if we are subscribed
+      if (!isNil(this.grpsObs)){
+        this.grpsSub.unsubscribe();
+      }
+      // generate new query
+      this.loading = true;
+      this.grpsObs = this.apollo.query<any>({
+        query: SearchGrps,
+        variables: options,
+      });
+      // subscribe to the new query to get results
+      this.grpsSub = this.grpsObs.subscribe(
+        ({data, loading}) => {
+          console.log('got new results');
+          console.log(data);
+          if (!loading) 
+            this.loadingBar.removeLoading();
+          this.grps = get(data,'searchGrps', null);
+          this.loading = loading;
+        }
+      );
     });
-   */
   };
 
   ngOnInit(): void {

@@ -25,6 +25,7 @@ import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 import { XLarge } from './home/x-large';
 
+import { LoadingBar } from './services/loading-bar';
 import { SearchComponent } from './search';
 import { MapComponent } from './map';
 import { ListComponent } from './list';
@@ -74,6 +75,7 @@ let config: ResponsiveConfigInterface = {
     LocaleDate,
   ],
   imports: [ // import Angular's modules
+    ApolloModule.withClient(getClient),
     BrowserModule,
     CommonModule,
     FormsModule,
@@ -87,12 +89,12 @@ let config: ResponsiveConfigInterface = {
     AgmCoreModule.forRoot({
       apiKey: process.env.GOOGLE_API_KEY 
     }),
-    ApolloModule.withClient(getClient),
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
     APP_PROVIDERS,
     {provide: ResponsiveConfig, useFactory: () => new ResponsiveConfig(config) },
+    LoadingBar,
   ]
 })
 export class AppModule {
