@@ -57,6 +57,11 @@ module.exports = function(config) {
      */
     reporters: [ 'dots', 'junit', 'mocha', 'coverage', 'remap-coverage' ],
 
+    junitReporter: {
+        outputDir: './',
+        outputFile: 'test-results.xml'
+    },
+
     // web server port
     port: 9876,
 
