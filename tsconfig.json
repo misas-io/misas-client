@@ -16,6 +16,9 @@
       "dom",
       "es6"
     ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "types": [
       "hammerjs",
       "jasmine",

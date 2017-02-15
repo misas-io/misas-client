@@ -2,8 +2,8 @@
  * Angular 2 decorators and services
  */
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-
 import { AppState } from './app.service';
+import { LoadingBar } from './services/loading-bar';
 
 /*
  * App Component
@@ -19,7 +19,7 @@ import { AppState } from './app.service';
 <mdl-layout mdl-layout-fixed-header mdl-layout-header-seamed>
     <mdl-layout-header mdl-shadow="2">
       <mdl-layout-header-row>
-        <mdl-layout-title [routerLink]=" ['./'] ">Misas.io</mdl-layout-title>
+        <mdl-layout-title [routerLink]=" ['./'] "><div><img src="/assets/img/church-119x75.png" alt="church" style="max-height: 50px;"></div></mdl-layout-title>
         <mdl-layout-spacer></mdl-layout-spacer>
         <!-- Navigation. We hide it in small screens. -->
         <mdl-textfield type="text" [(ngModel)]="text6" icon="search"></mdl-textfield>
@@ -34,10 +34,10 @@ import { AppState } from './app.service';
           <a class="mdl-navigation__link" [routerLink]=" ['./parroquias'] ">
             PARROQUIAS
           </a>
-          -->
           <button mdl-button mdl-button-type="raised" mdl-ripple mdl-colored="accent">
             QUIERO IR A MISA
           </button>
+          -->
         </nav>
       </mdl-layout-header-row>
     </mdl-layout-header>
@@ -68,6 +68,7 @@ import { AppState } from './app.service';
       </nav>
     </mdl-layout-drawer>
     <mdl-layout-content>
+      <mdl-progress *ngIf="loadingBar.loading" [indeterminate]="loadingBar.loading" style="width: 100%;"></mdl-progress>
       <!-- Your content goes here -->
       <main>
         <router-outlet class='contentfilterinator-container'></router-outlet>
@@ -93,7 +94,7 @@ export class AppComponent implements OnInit {
   name = 'Angular 2 Webpack Starter';
   url = 'https://twitter.com/AngularClass';
   copyYear: number;
-  constructor(public appState: AppState) {}
+  constructor(public appState: AppState, public loadingBar: LoadingBar) {}
 
   ngOnInit() {
     console.log('Initial App State', this.appState.state);

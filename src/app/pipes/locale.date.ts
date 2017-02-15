@@ -8,7 +8,6 @@ export class LocaleDate implements PipeTransform {
     let preTranslatedDate = moment(value, "ddd MMM DD YYYY HH:mm:ss");
     let date = moment(preTranslatedDate.toISOString());
     date.locale('es');
-    console.log(date);
     return date.format(format);
   }
 }

@@ -2,12 +2,13 @@ import { NgModule, ApplicationRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms'; 
 import { HttpModule } from '@angular/http';
 import { RouterModule, PreloadAllModules } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 import { MdlModule } from 'angular2-mdl';
 import { AgmCoreModule } from 'angular2-google-maps/core';
-import { ApolloModule } from 'angular2-apollo';
+import { ApolloModule } from 'apollo-angular';
 import { ResponsiveModule, ResponsiveConfig, ResponsiveConfigInterface } from 'ng2-responsive';
 /*
  * Platform and Environment providers/directives/pipes
@@ -24,6 +25,7 @@ import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 import { XLarge } from './home/x-large';
 
+import { LoadingBar } from './services/loading-bar';
 import { SearchComponent } from './search';
 import { MapComponent } from './map';
 import { ListComponent } from './list';
@@ -73,9 +75,11 @@ let config: ResponsiveConfigInterface = {
     LocaleDate,
   ],
   imports: [ // import Angular's modules
+    ApolloModule.withClient(getClient),
     BrowserModule,
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     ResponsiveModule,
@@ -85,12 +89,12 @@ let config: ResponsiveConfigInterface = {
     AgmCoreModule.forRoot({
       apiKey: process.env.GOOGLE_API_KEY 
     }),
-    ApolloModule.withClient(getClient),
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
     APP_PROVIDERS,
     {provide: ResponsiveConfig, useFactory: () => new ResponsiveConfig(config) },
+    LoadingBar,
   ]
 })
 export class AppModule {
