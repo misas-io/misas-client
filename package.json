@@ -1,6 +1,6 @@
 {
   "name": "misas-client",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "An Angular 2 client for misas-server GraphQL API",
   "keywords": [
     "angular2",
