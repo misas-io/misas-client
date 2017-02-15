@@ -61,7 +61,7 @@ module.exports = function(config) {
         outputDir: './tests/',
         outputFile: 'test-results.xml'
     },
-
+ 
     // web server port
     port: 9876,
 
