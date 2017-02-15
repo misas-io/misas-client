@@ -10,6 +10,7 @@ node {
   }
   stage('publish test results') {
     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage/html/', reportFiles: 'index.html', reportName: 'Code Coverage Reports'])
+    junit 'tests/**/test-results.xml'
   }
   stage('deploy assets') {
     sh './docker/scripts/deploy_container.sh'

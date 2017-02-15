@@ -58,7 +58,7 @@ module.exports = function(config) {
     reporters: [ 'dots', 'junit', 'mocha', 'coverage', 'remap-coverage' ],
 
     junitReporter: {
-        outputDir: './',
+        outputDir: './tests/',
         outputFile: 'test-results.xml'
     },
 
