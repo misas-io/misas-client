@@ -1,7 +1,15 @@
-import { get, isNil, isEmpty } from 'lodash';
-import { Component, Input, Output, OnChanges, SimpleChange, EventEmitter } from '@angular/core';
+import { set, get, findIndex, isNil, isEmpty } from 'lodash';
+import { 
+  Component, 
+  Input, 
+  Output, 
+  OnChanges, 
+  SimpleChange, 
+  EventEmitter, 
+  OnInit
+} from '@angular/core';
+import { Router, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
-import { OnInit } from '@angular/core';
 import { Apollo, ApolloQueryObservable} from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
@@ -10,10 +18,18 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { RxObservableQuery } from 'apollo-client-rxjs';
 import 'rxjs/add/operator/map';
 import 'apollo-client-rxjs';
-
+// MISAS modules 
 import { SearchFieldsObserver } from '../services/search-fields-observer';
 import { LoadingBar } from '../services/loading-bar';
-import { SortOptions, EventTypeOptions } from './search.component.options';
+import { 
+  LocationOptions, 
+  SortOptions, 
+  EventTypeOptions,
+  getLocationOption,
+  getLocationOptionSortOptions,
+  isCitySearchVisible
+} from './search.options';
+import { SearchAnimations } from './search.animations';
 import { SearchGrps } from './search.model';
 
 @Component({
@@ -21,6 +37,7 @@ import { SearchGrps } from './search.model';
   styleUrls: [ './search.component.css' ],
   templateUrl: './search.component.html',
   providers: [ SearchFieldsObserver ],
+  animations: SearchAnimations,
 })
 export class SearchComponent implements OnInit {
   @Input('queryBounds') queryBounds: Number[][];
@@ -28,12 +45,16 @@ export class SearchComponent implements OnInit {
 	// form properties
 	public searchForm: FormGroup;
   public loading = false;
-  public initial = true;
-  public searchOptions: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  public search: any = {};
+  public locationOptions: any[] = LocationOptions;
+  public sortOptions: Array<any>;
+  public animationOptions: any = {};
+  public eventTypes: any[] = EventTypeOptions;
+  private searchOptions: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  // grps property
   private grpsObs: Observable<ApolloQueryResult<any>>;
   private grpsSub: any;
-  // grps property
-  grpsValue: any;
+  grpsValue: any = {};
   @Output()
   grpsChange: EventEmitter<any> = new EventEmitter<any>();
 	@Input()
@@ -44,31 +65,59 @@ export class SearchComponent implements OnInit {
     this.grpsValue = value;
     this.grpsChange.emit(this.grpsValue);
   };
-  public sortOptions: any[] = SortOptions;
-  public eventTypes: any[] = EventTypeOptions;
-  private advOptions = false;
 
 	constructor(
     public loadingBar: LoadingBar,
 		private apollo: Apollo, 
 		private searchFields: SearchFieldsObserver, 
-		private fb: FormBuilder
+		private fb: FormBuilder,
+    private router: Router,
+    private r: ActivatedRoute
 	) {
-    this.loadingBar.addLoading();
-		this.grps = {};
+
+    // setup initial values based on URL
+    const s: ActivatedRouteSnapshot = r.snapshot;
+    const locationOption: string = getLocationOption(get(s.queryParams,'locationOption', ''));
+    const sortOption: string = get(s.queryParams,'sortBy', '');
 		this.searchForm = this.fb.group({
 			name: '',
 			city: '',
 			state: '',
 			useMap: true,
-			sortBy: "",
+			sortBy: sortOption,
 			polygon: null,
-			location: ''
+			locationOption: get(locationOption, 'object')
 		});
+    this.sortOptions = getLocationOptionSortOptions(get(locationOption,'object.value',''));
+    this.loadingBar.addLoading();
+
+    // on changes to location, set sorting to default if available
+    this.searchForm.controls['locationOption'].valueChanges.subscribe((locationOpt) => {
+      let defaultSort = get(locationOpt, 'defaultSort');
+      this.searchForm.controls['sortBy'].setValue(defaultSort);
+    });
+
+    // on changes update URL parameters and make the approriate query
+    this.searchForm.valueChanges.subscribe((data) => {
+      let queryParams = {};
+      let locationOption: string = get(data, 'locationOption.value', '');  
+      let sortOption = get(data, 'sortBy');  
+      if (locationOption) { 
+        set(queryParams, 'locationOption', locationOption);
+        // We don't have sortBy for this location type
+        if (locationOption === 'SHARED_LOCATION')
+          sortOption = undefined;
+        this.sortOptions = getLocationOptionSortOptions(locationOption);
+      }
+      if (sortOption) set(queryParams, 'sortBy', sortOption);
+      this.router.navigate([], {
+        queryParams: queryParams,
+        relativeTo: this.r
+      });
+    });
+
     // setup search grps 
     this.searchOptions.subscribe((options) => {
-      console.log('got new searchOptions');
-      console.log(options);
       // check if we got any options
       if (isNil(options) || isEmpty(options)){
         this.grps = {};
@@ -85,10 +134,9 @@ export class SearchComponent implements OnInit {
         variables: options,
       });
       // subscribe to the new query to get results
+      this.search = options;
       this.grpsSub = this.grpsObs.subscribe(
         ({data, loading}) => {
-          console.log('got new results');
-          console.log(data);
           if (!loading) 
             this.loadingBar.removeLoading();
           this.grps = get(data,'searchGrps', null);
@@ -118,25 +166,26 @@ export class SearchComponent implements OnInit {
     });
   };
 
-	/*
-  ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-    if (changes['queryBounds'] && !isNil(this.queryBounds)) {
-      this.searchArea = {
-        coordinates: this.queryBounds 
-      };
-    }
-  };
-	*/
-
   getFormFieldObserver(name: string): Observable<any> {
     return this.searchForm
       .get(name)
       .valueChanges;
   };
+  /**
+   * checks whether the city search field should be visible
+   */
+  public isCitySearchVisible(){
+    let locationOption: any = this.searchForm.get('locationOption').value;
+    let sortBy: string = this.searchForm.get('sortBy').value;
+    if (locationOption && sortBy) {
+      return isCitySearchVisible(locationOption.value, sortBy);
+    }
+    return false;
+  };
 
   query() {
     /*
-		let point = this.searchModel.point;
+       let point = this.searchModel.point;
     let name = this.searchModel.name;
     let sort_by = this.searchModel.sort_by;
     if (sort_by === "RELEVANCE") {
