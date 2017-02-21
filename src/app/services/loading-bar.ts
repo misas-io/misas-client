@@ -22,4 +22,8 @@ export class LoadingBar {
     if (--this.loadingCounter <= 0)
       this.loading = false;
   };
+  public reset(){
+    this.loadingCounter = 0;
+    this.loading = false;
+  };
 }
