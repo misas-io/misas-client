@@ -5,14 +5,21 @@
         <div id="location-options" class="mdl-grid mdl-grid--no-spacing" style="min-height: 100%;">
           <!-- location finding options -->
           <div class="mdl-cell mdl-cell--12-col mdl-cell--bottom">
-            <mdl-icon *ngIf="searchForm.controls.locationOption?.value">{{ searchForm.controls.locationOption?.value.icon }}</mdl-icon>
+            <mdl-icon *ngIf="searchForm.controls.locationOption?.value">
+              {{ searchForm.controls.locationOption?.value.icon }}
+            </mdl-icon>
             <mdl-select formControlName="locationOption">
-              <mdl-option *ngFor="let locationOption of locationOptions" [value]="locationOption.object">{{locationOption.title}}</mdl-option>
+              <mdl-option *ngFor="let locationOption of locationOptions" 
+                        [value]="locationOption.object">
+                {{locationOption.title}}
+              </mdl-option>
             </mdl-select>
           </div>
           <!-- location search field -->
           <div class="mdl-cell mdl-cell--12-col mdl-cell--bottom" *ngIf="isCitySearchVisible()" [@flyInLeft]="animationOptions.citySearchState">
-            <mdl-textfield type="text" placeholder="Ciudad, estado en Mexico"></mdl-textfield>
+            <mdl-textfield formControlName="cityState"
+                           placeholder="Ciudad, estado en Mexico">
+            </mdl-textfield>
           </div>
         </div>
       </div>
@@ -30,7 +37,9 @@
            class="mdl-cell mdl-cell--4-col mdl-cell--4-offset-tablet mdl-cell--bottom" 
            *ngIf="searchForm.controls.sortBy?.value === 'RELEVANCE'" 
            [@flyInUp]="animationOptions.sortOptionsState">
-        <mdl-textfield type="text" placeholder="Nombre de parroquia"></mdl-textfield>
+        <mdl-textfield formControlName="name" type="text" 
+                       placeholder="Nombre de parroquia">
+        </mdl-textfield>
       </div>
     </div>
     <!--{{ searchForm.value | json }}-->

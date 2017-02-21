@@ -47,7 +47,7 @@ export function getLocationOptionSortOptions(value: string): Array<any> {
 };
 
 export function isCitySearchVisible(locationOption: string, sortOption: string){
-  if (['OTHER_LOCATION'].includes(locationOption)){
+  if ('OTHER_LOCATION' === locationOption){
     return true;
   }
   return false;

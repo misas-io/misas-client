@@ -6,9 +6,13 @@ query SearchGrps(
   $point: PointI, 
   $polygon: PolygonI,
   $sort_by: SortTypes
+  $city: String,
+  $state: String
 ){
   searchGrps(
     sortBy: $sort_by,
+    state: $state,
+    city: $city,
     name: $name,
     point: $point,
     polygon: $polygon

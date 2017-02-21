@@ -4,9 +4,6 @@ import { Component } from '@angular/core';
  * We are using some magic with es6-promise-loader that will wrap the module with a Promise
  * see https://github.com/gdi2290/es6-promise-loader for more info
  */
-
-console.log('`Detail` component loaded asynchronously');
-
 @Component({
   selector: 'detail',
   template: `
@@ -20,7 +17,6 @@ export class DetailComponent {
   }
 
   ngOnInit() {
-    console.log('hello `Detail` component');
   }
 
 }
