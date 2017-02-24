@@ -1,0 +1,11 @@
+<div *ngIf="grp" >
+  <h3> {{ grp.name }} </h3>
+  <div *ngIf="grp.address">
+    {{ grp.address.address_line_1 }},
+    {{ grp.address.city }},
+    {{ grp.address.state }}
+  </div>
+  <div>
+    <!-- {{ grp | json }} -->
+  </div>
+</div>
