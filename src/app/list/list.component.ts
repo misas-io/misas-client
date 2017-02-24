@@ -12,12 +12,4 @@ export class ListComponent {
 
   constructor() {}
 
-  /*
-  ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-    if (changes['grps'] && !isNil(this.grps)) {
-        
-    }
-  };
- */
-
 }

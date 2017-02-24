@@ -30,6 +30,7 @@ import { SearchComponent } from './search';
 import { MapComponent } from './map';
 import { ListComponent } from './list';
 import { MdlSelectModule } from '@angular2-mdl-ext/select';
+import { GrpDetailComponent } from './grp-detail';
 import { MdlPopoverModule } from '@angular2-mdl-ext/popover';
 import { LocaleDate } from './pipes/locale.date';
 
@@ -73,6 +74,7 @@ let config: ResponsiveConfigInterface = {
     MapComponent,
     ListComponent,
     LocaleDate,
+    GrpDetailComponent,
   ],
   imports: [ // import Angular's modules
     ApolloModule.withClient(getClient),
