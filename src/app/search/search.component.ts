@@ -181,7 +181,7 @@ export class SearchComponent implements OnInit {
    */
   private switchQuery(options) {
     // check if we got any options
-    console.log(`switched query %j`, options);
+    console.log(`switched query`, options);
     this.loadingBar.reset();
     this.loadingBar.addLoading();
     if (isNil(options) || isEmpty(options)){

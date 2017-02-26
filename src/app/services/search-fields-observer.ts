@@ -21,7 +21,7 @@ export interface FieldEvent {
 @Injectable()
 export class SearchFieldsObserver {
   
-  private _fieldEvents: BehaviorSubject<FieldEvent>;
+  public _fieldEvents: BehaviorSubject<FieldEvent>;
   constructor() {
     this._fieldEvents = <BehaviorSubject<FieldEvent>>new BehaviorSubject(null);
     // get url fields if any, these preceed location

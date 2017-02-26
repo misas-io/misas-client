@@ -91,8 +91,7 @@ module.exports = function (options) {
          */
         {
           test: /\.ts$/,
-          loader: 'awesome-typescript-loader',
-          query: {
+          loader: ['awesome-typescript-loader?'+JSON.stringify({
             // use inline sourcemaps for "karma-remap-coverage" reporter
             sourceMap: false,
             inlineSourceMap: true,
@@ -103,7 +102,7 @@ module.exports = function (options) {
               removeComments: true
 
             }
-          },
+          }), 'angular2-template-loader'],
           exclude: [/\.e2e\.ts$/]
         },
 
