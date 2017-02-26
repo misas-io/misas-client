@@ -29,8 +29,8 @@ import { LoadingBar } from './services/loading-bar';
 import { SearchComponent } from './search';
 import { MapComponent } from './map';
 import { ListComponent } from './list';
-import { MdlSelectModule } from '@angular2-mdl-ext/select';
 import { GrpDetailComponent } from './grp-detail';
+import { MdlSelectModule } from '@angular2-mdl-ext/select';
 import { MdlPopoverModule } from '@angular2-mdl-ext/popover';
 import { LocaleDate } from './pipes/locale.date';
 

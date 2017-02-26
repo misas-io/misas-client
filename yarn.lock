@@ -289,15 +289,9 @@ apollo-angular@^0.11.0:
   dependencies:
     apollo-client-rxjs "~0.5.0"
 
-apollo-client-rxjs@^0.5.1:
+apollo-client-rxjs@^0.5.1, apollo-client-rxjs@~0.5.0:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/apollo-client-rxjs/-/apollo-client-rxjs-0.5.1.tgz#52cd0e836f28178d5f2cbdee9917b3395afd063f"
-
-apollo-client-rxjs@~0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/apollo-client-rxjs/-/apollo-client-rxjs-0.5.0.tgz#fdf6a61431c78e23eccbb5bfa431b7eae4d682b0"
-  dependencies:
-    lodash "^4.17.2"
 
 apollo-client@0.8.0:
   version "0.8.0"
@@ -4407,6 +4401,10 @@ redux@^3.4.0:
     loose-envify "^1.1.0"
     symbol-observable "^1.0.2"
 
+reflect-metadata@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.10.tgz#b4f83704416acad89988c9b15635d47e03b9344a"
+
 regenerate@^1.2.1:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.3.2.tgz#d1941c67bad437e1be76433add5b385f95b19260"
@@ -5478,6 +5476,10 @@ wbuf@^1.1.0, wbuf@^1.4.0:
 weak-map@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/weak-map/-/weak-map-1.0.0.tgz#b66e56a9df0bd25a76bbf1b514db129080614a37"
+
+web-animations-js@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/web-animations-js/-/web-animations-js-2.2.2.tgz#7c3aa5382c5eade70cd206880d56a37869630638"
 
 webdriver-manager@^10.3.0:
   version "10.3.0"
