@@ -127,7 +127,7 @@ export class SearchComponent implements OnInit {
         
     // setup search grps 
     this.searchOptions.subscribe((options) => {
-      this.switchQuery(options);
+      this._switchQuery(options);
     });
   };
 
@@ -146,8 +146,6 @@ export class SearchComponent implements OnInit {
       if (lat != 0.0 && lon != 0.0) {
         this.location = { coordinates: [lon, lat] };
         this.gettingLocation = true;
-        console.log(this.location);
-        console.log(this.locationOption);
         // only use location when using the current location option
         if (this.locationOption === 'CURRENT_LOCATION') {
           if (!this.sortBy || this.sortBy === '') {
@@ -179,7 +177,7 @@ export class SearchComponent implements OnInit {
   /**
    * Use the new query and unsubscribe from the old query
    */
-  private switchQuery(options) {
+  public _switchQuery(options) {
     // check if we got any options
     console.log(`switched query`, options);
     this.loadingBar.reset();
@@ -227,7 +225,6 @@ export class SearchComponent implements OnInit {
         locationOptionChanged,
         sortByChanged
       } = this.formChanged(data);
-      console.log(`got searchForm event`);
       if (!formChanged) {
         console.log(`form did not changed`);
         this.oldSearchFormValue = data;
