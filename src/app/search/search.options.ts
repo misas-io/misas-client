@@ -56,7 +56,8 @@ export function isCitySearchVisible(locationOption: string, sortOption: string){
 export const SortOptions: any[] = [
   {
     title: 'Mas cercanas con el evento mas temprano',
-    value: 'BEST'
+    value: 'BEST',
+    needPoint: true,
   },
   {
     title: 'Nombre mas parecido',
@@ -64,13 +65,23 @@ export const SortOptions: any[] = [
   },
   {
     title: 'Mas cercanas',
-    value: 'NEAR'
+    value: 'NEAR',
+    needPoint: true,
   },
   {
     title: 'Evento mas temprano',
     value: 'TIME'
   },
 ];
+
+export function getSortOption(value: string): any {
+  let i = findIndex(SortOptions, (sortOption) => {
+    let optionValue = get(sortOption, 'value');
+    return optionValue && optionValue === value; 
+  });
+  return SortOptions[i];
+};
+
 
 
 export const EventTypeOptions: any[] = [

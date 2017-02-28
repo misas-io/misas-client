@@ -27,6 +27,7 @@ import {
   EventTypeOptions,
   getLocationOption,
   getLocationOptionSortOptions,
+  getSortOption,
   isCitySearchVisible
 } from './search.options';
 import { SearchAnimations } from './search.animations';
@@ -84,7 +85,7 @@ export class SearchComponent implements OnInit {
 		private fb: FormBuilder,
     private router: Router,
     private r: ActivatedRoute
-	) {
+	){
 
     // setup initial values based on URL
     const s: ActivatedRouteSnapshot = r.snapshot;
@@ -191,7 +192,12 @@ export class SearchComponent implements OnInit {
     if (!isNil(this.grpsObs)){
       this.grpsSub.unsubscribe();
     }
-    // generate new query
+		// check query parameters are correct 
+    let sortOption = getSortOption(options.sort_by ? options.sort_by : 'BEST');
+    // check point is correct
+    if (!isNil(options.point) && isEmpty(options.point) && sortOption.needPoint) {
+      return;
+    }
     this.loading = true;
     this.grpsObs = this.apollo.query<any>({
       query: SearchGrps,

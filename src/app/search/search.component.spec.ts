@@ -112,90 +112,79 @@ describe('Search', () => {
 		result: { data: data3 },
 	}];
 
-	describe('Search without route params', () => {
+  getClient = function(){
+    return defaultClient;
+  };	
+
+  let configureModule = (queryParams) => {
+    return TestBed.configureTestingModule({
+      declarations: [ SearchComponent ],
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MdlModule,
+        MdlPopoverModule,
+        MdlSelectModule,
+        ApolloModule.withClient(getClient),
+      ],
+      providers: [
+        LoadingBar,
+        { provide: Router, useClass: RouterStub },
+        { provide: ActivatedRoute, useValue: { snapshot: { queryParams: queryParams } }}, 
+      ],
+    })
+    // Override component's own provider
+    .overrideComponent(SearchComponent, {
+      set: {
+        providers: [
+          { provide: SearchFieldsObserver, useClass: SearchFieldsObserverStub }
+        ]
+      }
+    });
+  };
+
+	describe('Search without query params', () => {
+
+    beforeEach(() => {
+      defaultClient = mockClient(...clientSettings);
+      return configureModule({});
+    });
+
+		beforeEach(() => {
+			fixture = TestBed.createComponent(SearchComponent);
+			comp = fixture.componentInstance;
+			spyOn(comp, '_switchQuery');
+      //jasmine.clock().install();
+    });
+
+    afterEach(() => {
+      //jasmine.clock().uninstall();
+    });
+
+    it('should create component', () => expect(comp).toBeDefined() );
+
+    it('it should have default params if no query params available', () => {
+      expect(comp.sortBy).toEqual('');
+    });
+  });
+
+	describe('Search with query params', () => {
+
 		beforeEach(() => {
 			defaultClient = mockClient(...clientSettings);
-			getClient = function(){
-				return defaultClient;
-			};	
-			return TestBed.configureTestingModule({
-				declarations: [ SearchComponent ],
-				imports: [
-					FormsModule,
-					ReactiveFormsModule,
-					MdlModule,
-					MdlPopoverModule,
-					MdlSelectModule,
-					ApolloModule.withClient(getClient),
-				],
-				providers: [
-					LoadingBar,
-					{ provide: Router, useClass: RouterStub },
-					{ provide: ActivatedRoute, useValue: { snapshot: { queryParams: {} } }}, 
-				],
-			})
-			// Override component's own provider
-			.overrideComponent(SearchComponent, {
-				set: {
-					providers: [
-						{ provide: SearchFieldsObserver, useClass: SearchFieldsObserverStub }
-					]
-				}
-			});
+      return configureModule({ locationOption: 'CURRENT_LOCATION' });
 		});
 
 		beforeEach(() => {
 			fixture = TestBed.createComponent(SearchComponent);
 			comp = fixture.componentInstance;
 			spyOn(comp, '_switchQuery');
+      //jasmine.clock().install();
 		});
 
-		it('should create component', () => expect(comp).toBeDefined() );
-
-		describe('searchForm', function(){
-			it('it should have default params if no query params available', () => {
-				expect(comp.sortBy).toEqual('');
-			});
-		});
-	});
-
-	describe('Search with params', () => {
-		beforeEach(() => {
-			defaultClient = mockClient(...clientSettings);
-			getClient = function(){
-				return defaultClient;
-			};	
-			return TestBed.configureTestingModule({
-				declarations: [ SearchComponent ],
-				imports: [
-					FormsModule,
-					ReactiveFormsModule,
-					MdlModule,
-					MdlPopoverModule,
-					MdlSelectModule,
-					ApolloModule.withClient(getClient),
-				],
-				providers: [
-					LoadingBar,
-					{ provide: Router, useClass: RouterStub },
-					{ provide: ActivatedRoute, useValue: { snapshot: { queryParams: { locationOption: 'CURRENT_LOCATION' } } }}, 
-				],
-			})
-			// Override component's own provider
-			.overrideComponent(SearchComponent, {
-				set: {
-					providers: [
-						{ provide: SearchFieldsObserver, useClass: SearchFieldsObserverStub }
-					]
-				}
-			});
-		});
-
-		beforeEach(() => {
-			fixture = TestBed.createComponent(SearchComponent);
-			comp = fixture.componentInstance;
-			spyOn(comp, '_switchQuery');
-		});
+    afterEach(() => {
+      //jasmine.clock().uninstall();
+    });
 
 		it('it should have default params if no query params available', () => {
 			expect(comp.sortBy).toEqual('');
