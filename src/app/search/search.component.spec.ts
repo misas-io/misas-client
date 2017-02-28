@@ -193,7 +193,6 @@ describe('Search', () => {
 
 		it('if searchForm doesn\'t change then it should not call switchQuery', function(){
 			fixture.detectChanges();
-			// use comp as any to access private properties
 			expect((comp as any)._switchQuery.calls.any()).toEqual(true);
 		});
 
