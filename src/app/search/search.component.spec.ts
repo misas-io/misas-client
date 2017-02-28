@@ -21,6 +21,7 @@ import { mockClient } from '../testing/_mocks';
 import { LoadingBar } from '../services/loading-bar';
 import { SearchFieldsObserver } from '../services/search-fields-observer';
 import { SearchComponent } from './search.component';
+import { SearchGrps } from './search.model';
 
 import gql from 'graphql-tag';
 
@@ -34,38 +35,23 @@ interface AllHeroesQueryResult {
   };
 }
 
-const query = gql`
-  query heroes {
-    allHeroes {
-      heroes {
-        name
-      }
-    }
-  }
-`;
+const query = SearchGrps; 
 
 const data = {
-  allHeroes: {
-    heroes: [{ name: 'Mr Foo' }, { name: 'Mr Bar' }],
-  },
+	searchGrps: [],
 };
 
 const data2 = {
-  allHeroes: {
-    heroes: [{ name: 'Mrs Foo' }, { name: 'Mrs Bar' }],
-  },
+	searchGrps: [],
 };
 
 const data3 = {
-  allHeroes: {
-    heroes: [{ name: 'Mr Bar' }],
-  },
+	searchGrps: [],
 };
 
 @Injectable()
 class SearchFieldsObserverStub {
   public fieldEvents(callback: Function): void {
-    console.log('calling fiedlEvents');     
     callback({
       location: {
         lat: 31.6903638,
@@ -77,6 +63,8 @@ class SearchFieldsObserverStub {
 
 @Injectable()
 class RouterStub {
+	public navigate(){
+	};
 };
 
 
@@ -111,7 +99,7 @@ describe('Search', () => {
 		request: { query },
 		result: { data },
 	}, {
-		request: { query, variables: { foo: 'Foo' } },
+		request: { query, variables: { sortBy: 'BEST', point: { coordinates: [-106.42454780000003, 31.6903638] } } },
 		result: { data: data2 },
 	}, {
 		request: { query, variables: { foo: 'Bar' } },
@@ -124,58 +112,105 @@ describe('Search', () => {
 		result: { data: data3 },
 	}];
 
-	beforeEach(() => {
-    defaultClient = mockClient(...clientSettings);
-		getClient = function(){
-			return defaultClient;
-		};	
+  getClient = function(){
+    return defaultClient;
+  };	
+
+  let configureModule = (queryParams) => {
     return TestBed.configureTestingModule({
       declarations: [ SearchComponent ],
-			imports: [
-				FormsModule,
-				ReactiveFormsModule,
-				MdlModule,
-				MdlPopoverModule,
-				MdlSelectModule,
-				ApolloModule.withClient(getClient),
-			],
-			providers: [
-				LoadingBar,
-        { 
-          provide: SearchFieldsObserver, useValue: { 
-            fieldEvents: function(callback: Function): void {
-              callback({
-                location: {
-                  lat: 31.6903638,
-                  lon: -106.42454780000003
-                }
-              });
-            }
-          }
-        },
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MdlModule,
+        MdlPopoverModule,
+        MdlSelectModule,
+        ApolloModule.withClient(getClient),
+      ],
+      providers: [
+        LoadingBar,
         { provide: Router, useClass: RouterStub },
-				{ provide: ActivatedRoute, useValue: { snapshot: { queryParams: {} } }}, 
-			],
+        { provide: ActivatedRoute, useValue: { snapshot: { queryParams: queryParams } }}, 
+      ],
+    })
+    // Override component's own provider
+    .overrideComponent(SearchComponent, {
+      set: {
+        providers: [
+          { provide: SearchFieldsObserver, useClass: SearchFieldsObserverStub }
+        ]
+      }
+    });
+  };
+
+	describe('Search without query params', () => {
+
+    beforeEach(() => {
+      defaultClient = mockClient(...clientSettings);
+      return configureModule({});
+    });
+
+		beforeEach(() => {
+			fixture = TestBed.createComponent(SearchComponent);
+			comp = fixture.componentInstance;
+			spyOn(comp, '_switchQuery');
+      //jasmine.clock().install();
+    });
+
+    afterEach(() => {
+      //jasmine.clock().uninstall();
+    });
+
+    it('should create component', () => expect(comp).toBeDefined() );
+
+    it('it should have default params if no query params available', () => {
+      expect(comp.sortBy).toEqual('');
     });
   });
 
-	beforeEach(() => {
-    fixture = TestBed.createComponent(SearchComponent);
-    comp = fixture.componentInstance;
-  });
+	describe('Search with query params', () => {
 
-	it('should create component', () => expect(comp).toBeDefined() );
-
-	describe('searchForm', function(){
-    
-		it('it should have default params if no query params available', () => {
-      expect(comp.sortBy).toEqual('');
+		beforeEach(() => {
+			defaultClient = mockClient(...clientSettings);
+      return configureModule({ locationOption: 'CURRENT_LOCATION' });
 		});
 
-		it('it should call switchQuery', () => {
-      // use comp as any to access private properties
-			spyOn((comp as any), 'switchQuery');
-      expect((comp as any).switchQuery.calls.any()).toEqual(false);
+		beforeEach(() => {
+			fixture = TestBed.createComponent(SearchComponent);
+			comp = fixture.componentInstance;
+			spyOn(comp, '_switchQuery');
+      //jasmine.clock().install();
+		});
+
+    afterEach(() => {
+      //jasmine.clock().uninstall();
+    });
+
+		it('it should have default params if no query params available', () => {
+			expect(comp.sortBy).toEqual('');
+			expect(comp.locationOption).toEqual('CURRENT_LOCATION');
+		});
+
+		it('if searchForm doesn\'t change then it should not call switchQuery', function(){
+			fixture.detectChanges();
+			expect((comp as any)._switchQuery.calls.any()).toEqual(true);
+		});
+
+		it('if searchForm changes then it should call switch', (done) => {	
+			fixture.detectChanges();
+			setTimeout(() => {
+				expect((comp as any)._switchQuery).toHaveBeenCalled();
+				expect((comp as any)._switchQuery.calls.argsFor(0))
+				.toEqual([
+					{
+						sort_by: 'BEST', 
+						point: { 
+							coordinates: [-106.42454780000003, 31.6903638] 
+						} 
+					} 
+				]);
+				done();
+			},10);
 		});
 	});
 });

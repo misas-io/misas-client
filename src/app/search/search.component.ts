@@ -27,6 +27,7 @@ import {
   EventTypeOptions,
   getLocationOption,
   getLocationOptionSortOptions,
+  getSortOption,
   isCitySearchVisible
 } from './search.options';
 import { SearchAnimations } from './search.animations';
@@ -84,7 +85,7 @@ export class SearchComponent implements OnInit {
 		private fb: FormBuilder,
     private router: Router,
     private r: ActivatedRoute
-	) {
+	){
 
     // setup initial values based on URL
     const s: ActivatedRouteSnapshot = r.snapshot;
@@ -127,7 +128,7 @@ export class SearchComponent implements OnInit {
         
     // setup search grps 
     this.searchOptions.subscribe((options) => {
-      this.switchQuery(options);
+      this._switchQuery(options);
     });
   };
 
@@ -146,8 +147,6 @@ export class SearchComponent implements OnInit {
       if (lat != 0.0 && lon != 0.0) {
         this.location = { coordinates: [lon, lat] };
         this.gettingLocation = true;
-        console.log(this.location);
-        console.log(this.locationOption);
         // only use location when using the current location option
         if (this.locationOption === 'CURRENT_LOCATION') {
           if (!this.sortBy || this.sortBy === '') {
@@ -179,7 +178,7 @@ export class SearchComponent implements OnInit {
   /**
    * Use the new query and unsubscribe from the old query
    */
-  private switchQuery(options) {
+  public _switchQuery(options) {
     // check if we got any options
     console.log(`switched query`, options);
     this.loadingBar.reset();
@@ -193,7 +192,12 @@ export class SearchComponent implements OnInit {
     if (!isNil(this.grpsObs)){
       this.grpsSub.unsubscribe();
     }
-    // generate new query
+		// check query parameters are correct 
+    let sortOption = getSortOption(options.sort_by ? options.sort_by : 'BEST');
+    // check point is correct
+    if (!isNil(options.point) && isEmpty(options.point) && sortOption.needPoint) {
+      return;
+    }
     this.loading = true;
     this.grpsObs = this.apollo.query<any>({
       query: SearchGrps,
@@ -227,7 +231,6 @@ export class SearchComponent implements OnInit {
         locationOptionChanged,
         sortByChanged
       } = this.formChanged(data);
-      console.log(`got searchForm event`);
       if (!formChanged) {
         console.log(`form did not changed`);
         this.oldSearchFormValue = data;

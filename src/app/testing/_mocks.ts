@@ -1,5 +1,5 @@
 import { NetworkInterface, BatchedNetworkInterface, Request } from 'apollo-client/transport/networkInterface';
-import { ApolloClient } from 'apollo-client';
+import ApolloClient from 'apollo-client';
 import { ExecutionResult, DocumentNode } from 'graphql';
 import { print } from 'graphql-tag/printer';
 
