@@ -16,15 +16,12 @@ import util from 'util';
 import { ApolloModule } from 'apollo-angular';
 import ApolloClient from 'apollo-client';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { NgReduxModule, NgRedux } from '@angular-redux/store'; 
-import { NgZone } from '@angular/core';
 // MISAS modules
 import { mockClient } from '../../testing/_mocks';
 import { LoadingBar } from '../../services/loading-bar';
+import { SearchFieldsObserver } from '../../services/search-fields-observer';
 import { SearchComponent } from './search.component';
 import { SearchGrps } from './search.model';
-import { SearchActions } from './search.actions';
-import { IState, reducer, configureStore } from '../../store/initial';
 
 import gql from 'graphql-tag';
 
@@ -53,16 +50,23 @@ const data3 = {
 };
 
 @Injectable()
+class SearchFieldsObserverStub {
+  public fieldEvents(callback: Function): void {
+    callback({
+      location: {
+        lat: 31.6903638,
+        lon: -106.42454780000003
+      }
+    });
+  }
+};
+
+@Injectable()
 class RouterStub {
 	public navigate(){
 	};
 };
 
-export function _ngReduxFactory(ngZone: NgZone) {
-  let redux = new NgRedux(ngZone);
-	configureStore(redux as NgRedux<IState>);
-  return redux;
-}
 
 @Injectable()
 export class ActivatedRouteStub {
@@ -122,12 +126,9 @@ describe('Search', () => {
         MdlPopoverModule,
         MdlSelectModule,
         ApolloModule.withClient(getClient),
-        NgReduxModule,
       ],
       providers: [
         LoadingBar,
-        SearchActions,
-        { provide: NgRedux, useFactory: _ngReduxFactory, deps: [ NgZone ] },
         { provide: Router, useClass: RouterStub },
         { provide: ActivatedRoute, useValue: { snapshot: { queryParams: queryParams } }}, 
       ],
@@ -136,6 +137,7 @@ describe('Search', () => {
     .overrideComponent(SearchComponent, {
       set: {
         providers: [
+          { provide: SearchFieldsObserver, useClass: SearchFieldsObserverStub }
         ]
       }
     });
@@ -159,6 +161,11 @@ describe('Search', () => {
       //jasmine.clock().uninstall();
     });
 
+    it('should create component', () => expect(comp).toBeDefined() );
+
+    it('it should have default params if no query params available', () => {
+      expect(comp.sortBy).toEqual('');
+    });
   });
 
 	describe('Search with query params', () => {
@@ -179,9 +186,17 @@ describe('Search', () => {
       //jasmine.clock().uninstall();
     });
 
-    /*
+		it('it should have default params if no query params available', () => {
+			expect(comp.sortBy).toEqual('');
+			expect(comp.locationOption).toEqual('CURRENT_LOCATION');
+		});
+
+		it('if searchForm doesn\'t change then it should not call switchQuery', function(){
+			fixture.detectChanges();
+			expect((comp as any)._switchQuery.calls.any()).toEqual(true);
+		});
+
 		it('if searchForm changes then it should call switch', (done) => {	
-    
 			fixture.detectChanges();
 			setTimeout(() => {
 				expect((comp as any)._switchQuery).toHaveBeenCalled();
@@ -197,6 +212,5 @@ describe('Search', () => {
 				done();
 			},10);
 		});
-    */
 	});
 });
