@@ -1,0 +1,33 @@
+<section class="section--center mdl-grid"
+         *ngIf="grps && grps.edges"
+         >
+	<mdl-card
+		*ngFor="let grp of grps.edges"
+		mdl-shadow="2"
+		class="mdl-cell mdl-cell--12-col">
+		<mdl-card-title>
+			<h2 mdl-card-title-text>{{ grp.node.name }}</h2>
+		</mdl-card-title>
+		<mdl-card-supporting-text>
+			<div class="mdl-grid">
+        <p>
+          {{ grp.node.address.address_line_1 }}
+          {{ grp.node.address.city }}, {{ grp.node.address.state }}, {{ grp.node.address.postal_code }}
+        </p>
+			</div>
+			<div class="mdl-grid">
+				<span class="mdl-cell mdl-cell--12-col">Siguientes misas:
+      		<mdl-chip *ngFor="let event of grp.node.nextEvents" mdl-label="{{ event | localeDate: 'h:mmA, ddd D [de] MMM ' }}"></mdl-chip>
+				</span>
+			</div>
+		</mdl-card-supporting-text>
+		<mdl-card-actions mdl-card-border>
+      <button mdl-button mdl-colored mdl-ripple [routerLink]="[ '/parroquia', grp.node.id ]">View</button>
+		</mdl-card-actions>
+		<mdl-card-menu>
+			<button mdl-button mdl-button-type="icon" mdl-ripple>
+				<mdl-icon>more_vert</mdl-icon>
+			</button>
+		</mdl-card-menu>
+	</mdl-card>
+</section>

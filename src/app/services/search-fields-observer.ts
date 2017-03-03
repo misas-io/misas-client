@@ -15,31 +15,38 @@ interface LocationCoordinates {
 }
 
 export interface FieldEvent {
-  query: String;
-  location: LocationName | LocationCoordinates;
+  location?: LocationName | LocationCoordinates;
 };
 
 @Injectable()
 export class SearchFieldsObserver {
   
-  private _fieldEvents: BehaviorSubject<FieldEvent>;
+  public _fieldEvents: BehaviorSubject<FieldEvent>;
   constructor() {
     this._fieldEvents = <BehaviorSubject<FieldEvent>>new BehaviorSubject(null);
     // get url fields if any, these preceed location
     // get location if any, these preceed getting location from server based on IP
-    BrowserLocation.get((err, result) => {
-      if (err) {
-        return;
-      }
-      let fieldEvent = {
-        query: "",
-        location: {
-          lat: get(result, 'coords.latitude', 0.0),
-          lon: get(result, 'coords.longitude', 0.0) 
+    try {
+      BrowserLocation.get((err, result) => {
+        if (err) {
+          console.log(err);
+          return;
         }
-      }; 
-      this._fieldEvents.next(fieldEvent);
-    });
+        console.log('got coordinates');
+        let fieldEvent = {
+          query: "",
+          location: {
+            lat: get(result, 'coords.latitude', 0.0),
+            lon: get(result, 'coords.longitude', 0.0) 
+          }
+        }; 
+        this._fieldEvents.next(fieldEvent);
+      });
+    } catch (err) {
+      console.log('got error');
+      console.log(err);
+      this._fieldEvents.next({});
+    }
   };
   fieldEvents(callback: any): void {
     this._fieldEvents.subscribe(callback);

@@ -1,0 +1,54 @@
+
+#location-options > div {
+  margin-right: 10px;
+}
+
+#location-options mdl-icon {
+  width: 40px;
+  padding: 17px 0px 25px 0px;
+}
+
+#location-options mdl-icon + mdl-select {
+  float: right;
+  width: -webkit-calc(100% - 40px);
+  width:    -moz-calc(100% - 40px);
+  width:         calc(100% - 40px);
+}
+
+#location-options > div > mdl-textfield {
+  max-width: 300px;
+  width: -webkit-calc(100% - 40px);
+  width:    -moz-calc(100% - 40px);
+  width:         calc(100% - 40px);
+  margin-left: 40px;
+}
+
+#sorting-options > h6 {
+  margin-top: 10px;  
+  margin-bottom: 10px;  
+}
+
+#sorting-options mdl-select {
+  float: right;
+  width: -webkit-calc(100% - 50px);
+  width:    -moz-calc(100% - 50px);
+  width:         calc(100% - 50px);
+}
+
+#sorting-options {
+  padding-right: 10px;
+}
+
+#other-options mdl-textfield {
+  float: right;
+  width: -webkit-calc(100% - 50px);
+  width:    -moz-calc(100% - 50px);
+  width:         calc(100% - 50px);
+}
+
+#other-options {
+  padding-right: 10px;
+}
+
+
+

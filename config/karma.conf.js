@@ -7,6 +7,9 @@ module.exports = function(config) {
 
   var configuration = {
 
+    client: {
+        captureConsole: false 
+    },
     // base path that will be used to resolve all patterns (e.g. files, exclude)
     basePath: '',
 
@@ -25,7 +28,10 @@ module.exports = function(config) {
      *
      * we are building the test environment in ./spec-bundle.js
      */
-    files: [ { pattern: './config/spec-bundle.js', watched: false } ],
+    files: [ 
+      { pattern: './config/spec-bundle.js', watched: false },
+      //{ pattern: '**/*.html' }
+    ],
 
     /*
      * preprocess matching files before serving them to the browser
@@ -57,6 +63,11 @@ module.exports = function(config) {
      */
     reporters: [ 'dots', 'junit', 'mocha', 'coverage', 'remap-coverage' ],
 
+    junitReporter: {
+        outputDir: './tests/',
+        outputFile: 'test-results.xml'
+    },
+ 
     // web server port
     port: 9876,
 

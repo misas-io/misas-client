@@ -56,7 +56,6 @@ module.exports = function (options) {
      * See: http://webpack.github.io/docs/configuration.html#entry
      */
     entry: {
-
       'polyfills': './src/polyfills.browser.ts',
       'vendor':    './src/vendor.browser.ts',
       'main':      './src/main.browser.ts'
@@ -155,7 +154,7 @@ module.exports = function (options) {
         /* File loader for supporting images, for example, in CSS files.
          */
         {
-          test: /\.(jpg|png|gif)$/,
+          test: /\.(jpg|png|gif|svg)$/,
           use: 'file-loader'
         },
 

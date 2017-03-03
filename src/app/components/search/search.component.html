@@ -1,0 +1,47 @@
+<div [mdl-shadow]="3">
+  <form [formGroup]="searchForm" novalidate>
+    <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--4-col mdl-cell--stretch">
+        <div id="location-options" class="mdl-grid mdl-grid--no-spacing" style="min-height: 100%;">
+          <!-- location finding options -->
+          <div class="mdl-cell mdl-cell--12-col mdl-cell--bottom">
+            <mdl-icon *ngIf="searchForm.controls.locationOption?.value">
+              {{ searchForm.controls.locationOption?.value.icon }}
+            </mdl-icon>
+            <mdl-select formControlName="locationOption">
+              <mdl-option *ngFor="let locationOption of locationOptions" 
+                        [value]="locationOption.object">
+                {{locationOption.title}}
+              </mdl-option>
+            </mdl-select>
+          </div>
+          <!-- location search field -->
+          <div class="mdl-cell mdl-cell--12-col mdl-cell--bottom" *ngIf="isCitySearchVisible()" [@flyInLeft]="animationOptions.citySearchState">
+            <mdl-textfield formControlName="cityState"
+                           placeholder="Ciudad, estado en Mexico">
+            </mdl-textfield>
+          </div>
+        </div>
+      </div>
+      <!-- sorting options -->
+      <div id="sorting-options" 
+           class="mdl-cell mdl-cell--4-col mdl-cell--bottom" 
+           *ngIf="sortOptions && sortOptions.length > 0" 
+           [@flyInUp]="animationOptions.sortOptionsState">
+        <h6>Ordenar parroquias por:</h6>
+        <mdl-select formControlName="sortBy">
+          <mdl-option *ngFor="let sortOption of sortOptions" [value]="sortOption.value">{{sortOption.title}}</mdl-option>
+        </mdl-select>
+      </div>
+      <div id="other-options" 
+           class="mdl-cell mdl-cell--4-col mdl-cell--4-offset-tablet mdl-cell--bottom" 
+           *ngIf="searchForm.controls.sortBy?.value === 'RELEVANCE'" 
+           [@flyInUp]="animationOptions.sortOptionsState">
+        <mdl-textfield formControlName="name" type="text" 
+                       placeholder="Nombre de parroquia">
+        </mdl-textfield>
+      </div>
+    </div>
+    <!--{{ searchForm.value | json }}-->
+  </form>
+</div>
