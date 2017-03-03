@@ -19,8 +19,8 @@ import { RxObservableQuery } from 'apollo-client-rxjs';
 import 'rxjs/add/operator/map';
 import 'apollo-client-rxjs';
 // MISAS modules 
-import { SearchFieldsObserver } from '../services/search-fields-observer';
-import { LoadingBar } from '../services/loading-bar';
+import { SearchFieldsObserver } from '../../services/search-fields-observer';
+import { LoadingBar } from '../../services/loading-bar';
 import { 
   LocationOptions, 
   SortOptions, 

@@ -10,28 +10,28 @@ import { MdlModule } from 'angular2-mdl';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import { ApolloModule } from 'apollo-angular';
 import { ResponsiveModule, ResponsiveConfig, ResponsiveConfigInterface } from 'ng2-responsive';
+import { MdlSelectModule } from '@angular2-mdl-ext/select';
+import { MdlPopoverModule } from '@angular2-mdl-ext/popover';
 /*
  * Platform and Environment providers/directives/pipes
  */
 import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
-// App is our top level component
+// MISAS modules
 import { AppComponent } from './app.component';
 import { getClient } from './app.client';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
-import { HomeComponent } from './home';
-import { AboutComponent } from './about';
-import { NoContentComponent } from './no-content';
-import { XLarge } from './home/x-large';
-
+import { HomeComponent } from './components/home';
+import { AboutComponent } from './components/about';
+import { PrivacyAndTermsComponent } from './components/privacy-and-terms';
+import { NoContentComponent } from './components/no-content';
+import { XLarge } from './components/home/x-large';
 import { LoadingBar } from './services/loading-bar';
-import { SearchComponent } from './search';
-import { MapComponent } from './map';
-import { ListComponent } from './list';
-import { GrpDetailComponent } from './grp-detail';
-import { MdlSelectModule } from '@angular2-mdl-ext/select';
-import { MdlPopoverModule } from '@angular2-mdl-ext/popover';
+import { SearchComponent } from './components/search';
+import { MapComponent } from './components/map';
+import { ListComponent } from './components/list';
+import { GrpDetailComponent } from './components/grp-detail';
 import { LocaleDate } from './pipes/locale.date';
 
 import '../styles/styles.scss';
@@ -75,6 +75,7 @@ let config: ResponsiveConfigInterface = {
     ListComponent,
     LocaleDate,
     GrpDetailComponent,
+		PrivacyAndTermsComponent,
   ],
   imports: [ // import Angular's modules
     ApolloModule.withClient(getClient),

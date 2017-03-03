@@ -7,7 +7,7 @@ import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
 /* MISAS modules */
 import { Grp } from './grp-detail.model';
-import { LoadingBar } from '../services/loading-bar';
+import { LoadingBar } from '../../services/loading-bar';
 
 @Component({
   selector: 'grps-detail', // <grps-detail></grps-detail>
