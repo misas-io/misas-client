@@ -10,6 +10,7 @@ import {
 import { LatLngBounds, LatLng, MapsAPILoader } from 'angular2-google-maps/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import "rxjs/add/operator/debounceTime";
+// MISAS modules
 import { style } from './map.component.style';
 
 declare const google: any;

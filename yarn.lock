@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@angular-redux/store@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@angular-redux/store/-/store-6.0.1.tgz#42df3053efd06bb71edaae1c52039b1f8eb2cae4"
+
 "@angular/common@^2.4.5":
   version "2.4.5"
   resolved "https://registry.yarnpkg.com/@angular/common/-/common-2.4.5.tgz#ada1a22b7ba01d1fdeb300115584478e031e9a4f"
@@ -4524,7 +4528,7 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "^0.4.2"
 
-redux@^3.4.0:
+redux@^3.4.0, redux@^3.5.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/redux/-/redux-3.6.0.tgz#887c2b3d0b9bd86eca2be70571c27654c19e188d"
   dependencies:

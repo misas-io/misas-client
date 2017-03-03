@@ -34,11 +34,11 @@ import { LoadingBar } from './services/loading-bar';
 
       <footer class="mdl-mini-footer">
         <div class="mdl-mini-footer__left-section">
-          <div class="mdl-logo">Misas.io</div>
+          <div class="mdl-logo">Misas</div>
           <ul class="mdl-mini-footer__link-list">
-            <li><a href="#">Help</a></li>
-            <li><a href="#">Privacy & Terms</a></li>
-            <li>Misas.io &copy; {{ copyYear }}</li>
+            <li><a [routerLink]="[ '/privacy-and-terms' ]">Privacy & Terms</a></li>
+            <li><a [routerLink]="[ '/about' ]">About us</a></li>
+            <li>Misas &copy; {{ copyYear }}</li>
           </ul>
         </div>
       </footer>

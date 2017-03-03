@@ -1,9 +1,10 @@
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './home';
-import { AboutComponent } from './about';
-import { NoContentComponent } from './no-content';
-import { GrpDetailComponent } from './grp-detail';
-import { DataResolver } from './app.resolver';
+import { HomeComponent } from './components/home';
+import { AboutComponent } from './components/about';
+import { PrivacyAndTermsComponent } from './components/privacy-and-terms';
+import { NoContentComponent } from './components/no-content';
+import { GrpDetailComponent } from './components/grp-detail';
+import { DataResolver } from './components/app.resolver';
 
 
 export const ROUTES: Routes = [
@@ -11,9 +12,6 @@ export const ROUTES: Routes = [
   { path: 'parroquia/:id', component: GrpDetailComponent },
   { path: 'home',  component: HomeComponent },
   { path: 'about', component: AboutComponent },
-  {
-    path: 'detail', loadChildren: () => System.import('./+detail')
-      .then((comp: any) => comp.default),
-  },
+  { path: 'privacy-and-terms', component: PrivacyAndTermsComponent },
   { path: '**',    component: NoContentComponent },
 ];

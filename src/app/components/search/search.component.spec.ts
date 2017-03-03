@@ -17,9 +17,9 @@ import { ApolloModule } from 'apollo-angular';
 import ApolloClient from 'apollo-client';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 // MISAS modules
-import { mockClient } from '../testing/_mocks';
-import { LoadingBar } from '../services/loading-bar';
-import { SearchFieldsObserver } from '../services/search-fields-observer';
+import { mockClient } from '../../testing/_mocks';
+import { LoadingBar } from '../../services/loading-bar';
+import { SearchFieldsObserver } from '../../services/search-fields-observer';
 import { SearchComponent } from './search.component';
 import { SearchGrps } from './search.model';
 

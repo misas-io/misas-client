@@ -6,17 +6,16 @@ import { ActivatedRoute } from '@angular/router';
   styles: [`
   `],
   template: `
-    <h1>About</h1>
-    <div>
-      For hot module reloading run
-      <pre>npm run start:hmr</pre>
-    </div>
-    <div>
-      <h3>
-        patrick@AngularClass.com
-      </h3>
-    </div>
-    <pre>this.localState = {{ localState | json }}</pre>
+	<div class="mdl-grid">
+		<div class="mdl-cell mdl-cell--10-col mdl-cell--1-offset">
+			<h1>Quienes somos</h1>
+			<div>
+				<p>
+				Que tal? Somos un par de programadores interesados en muchisimas cosas como todos. Queremos con esta pagina dar mejores recomendaciones de parroquias a las cuales atender. Ahorita tomamos solamente en cuenta horarios de misas, pero en el futuro queremos hacer recomendaciones de confessiones, kermeses, y otros eventos catholicos. Si quieren contactarnos favor de mandar un correo a <strong>administrator@misas.io</strong>
+				</p>
+			</div>
+		</div>
+	</div>
   `
 })
 export class AboutComponent {
@@ -46,7 +45,7 @@ export class AboutComponent {
     // remember that 'es6-promise-loader' is a promise
     setTimeout(() => {
 
-      System.import('../../assets/mock-data/mock-data.json')
+      System.import('../../../assets/mock-data/mock-data.json')
         .then(json => {
           console.log('async mockData', json);
           this.localState = json;
