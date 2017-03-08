@@ -1,14 +1,25 @@
 import { Injectable } from '@angular/core';
+import { get } from 'lodash';
+import { Action } from 'redux';
+//import { ThunkAction } from 'redux-thunk';
 import { NgRedux } from '@angular-redux/store';
+import * as BrowserLocation from 'browser-location';
+import { 
+  LOCATION_TYPES,  
+  LOCATION_STATUS, 
+  LOCATION_STATUS_OPTIONS,
+  LOCATION_TYPE_OPTIONS 
+} from './search.options';
 
-export interface ISearchAction {
+export interface ISearchAction extends Action {
   type: string,
   point?: number[],
   sortBy?: string,  
   name?: string,
   city?: string,
   state?: string,
-  params: any,
+  params?: any,
+  searchType?: string,
 };
 
 export interface IState {
@@ -17,6 +28,10 @@ export interface IState {
     foundLocation?: string,
     requestedLocation?: boolean,
     point: number[],
+  },
+  search?: {
+    type?: string,
+    typeOptions?: string[]
   },
   requestedQuery?: boolean,
   queryParams?: {
@@ -41,64 +56,77 @@ export const ACTIONS = {
   NOT_FOUND_LOCATION: 'SEARCH_NOT_FOUND_LOCATION',
   USE_CURRENT_LOCATION: 'SEARCH_USE_CURRENT_LOCATION',
   USE_OTHER_LOCATION: 'SEARCH_USE_OTHER_LOCATION',
-  SET_OTHER_LOCATION: 'SEARCH_SET_OTHER_LOCATION',
+  USE_SEARCH_TYPE: 'SEARCH_USE_SEARCH_TYPE',
   SET_SORT_BY: 'SEARCH_SORT_BY',
+  SET_OTHER_LOCATION: 'SEARCH_SET_OTHER_LOCATION',
   SET_NAME: 'SEARCH_SET_NAME',
-};
-
-export const LOCATION_TYPES = {
-  CURRENT: 'CURRENT_LOCATION',
-  OTHER: 'OTHER_LOCATION',
-};
-
-export const LOCATION_STATUS = {
-  FOUND: 'FOUND',
-  NOT_FOUND: 'NOT_FOUND',
-  LOOKING: 'LOOKING',
 };
 
 @Injectable()
 export class SearchActions {
 
   constructor(private ngRedux: NgRedux<any>) {}
+
+  public getNgRedux(): NgRedux<any> {
+    return this.ngRedux;
+  }
   
   public initial() {
     this.ngRedux.dispatch({
       type: ACTIONS.INITIAL,
-      params: {},
-      data: {}
     });
   }
 
-  public initalWithParams(params: any){
+  public initialWithParams(params: any){
     this.ngRedux.dispatch({
       type: ACTIONS.INITIAL_WITH_PARAMS,
       params: params,
-      data: {}, 
     });  
   };
 
   public findLocation(){
-    this.ngRedux.dispatch({
-      type: ACTIONS.FIND_LOCATION,
-      params: {},
-      data: {
-        retrivingLocation: true,
-      }, 
-    });  
+    this.ngRedux.dispatch(this.getLocation() as any);
   };
 
-  public foundLocation(point: number[]){
-    this.ngRedux.dispatch({
+  private getLocation(){
+    return (dispatch, getState) => {
+      dispatch({
+        type: ACTIONS.FIND_LOCATION,
+      });  
+      // try to get GPS location
+      BrowserLocation.get({}, (err, result) => {
+        if (err) {
+          dispatch(this.notFoundLocation());
+          return;
+        }
+        const point: number[] = [ 
+          get(result, 'coords.latitude', 0.0),
+          get(result, 'coords.longitude', 0.0) 
+        ]
+        dispatch(this.foundLocation(point));
+      });
+      // if there is no response after 5 seconds then
+      // set as not found
+      setTimeout(() => {
+        let foundType = get(getState(), 'location.foundLocation');
+        if (foundType == 'LOOKING') {
+          dispatch(this.notFoundLocation());
+        }
+      },10000); 
+    }
+  };
+
+  private foundLocation(point: number[]): ISearchAction {
+    return {
       type: ACTIONS.FOUND_LOCATION,
       point: point,
-    });  
+    };  
   };
 
-  public notFoundLocation(){
-    this.ngRedux.dispatch({
+  private notFoundLocation(): ISearchAction {
+    return {
       type: ACTIONS.NOT_FOUND_LOCATION,
-    });  
+    };
   };
 
   public useCurrentLocation(){
@@ -107,9 +135,11 @@ export class SearchActions {
     });  
   };
 
-  public useOtherLocation(){
+  public useSearchType(searchType: string){
+    console.log(searchType);
     this.ngRedux.dispatch({
-      type: ACTIONS.USE_OTHER_LOCATION,
+      type: ACTIONS.USE_SEARCH_TYPE,
+      searchType: searchType,
     });  
   };
 
@@ -124,13 +154,7 @@ export class SearchActions {
   public setSortBy(sortBy: string){
     this.ngRedux.dispatch({
       type: ACTIONS.SET_SORT_BY,
-      params: {},
-      data: {
-        location: LOCATION_TYPES.OTHER, 
-        queryParams: {
-          sortBy: sortBy,
-        },
-      }, 
+      sortBy: sortBy,
     });  
   };
 
@@ -146,7 +170,8 @@ const initialState: IState = {
   path: 'search',
 };
 
-function searchReducer(state: IState = initialState, action: ISearchAction): any {
+export function searchReducer(state: IState = initialState, action: ISearchAction): any {
+  let pointParam;
   switch (action.type) {
     case ACTIONS.FIND_LOCATION:
       return Object.assign({}, state, {
@@ -156,12 +181,20 @@ function searchReducer(state: IState = initialState, action: ISearchAction): any
         },
       });
     case ACTIONS.FOUND_LOCATION:
+      pointParam = action.point ? { point: { coordinates: action.point } } : {};
       return Object.assign({}, state, {
         location: {
           foundLocation: LOCATION_STATUS.FOUND,
           requestedLocation: true,     
           point: action.point,
         },
+        search: {
+          type: LOCATION_TYPES.CURRENT,
+          typeOptions: LOCATION_STATUS_OPTIONS[LOCATION_STATUS.FOUND],
+        },
+        queryParams: Object.assign({}, pointParam, {
+          sortBy: LOCATION_TYPE_OPTIONS[action.searchType].defaultSort,
+        }),
       });
     case ACTIONS.NOT_FOUND_LOCATION:
       return Object.assign({}, state, {
@@ -170,27 +203,24 @@ function searchReducer(state: IState = initialState, action: ISearchAction): any
           requestedLocation: true,     
           point: action.point,
         },
-      });
-    case ACTIONS.USE_CURRENT_LOCATION:
-      return Object.assign({}, state, {
-        location: Object.assign({}, state.location, {
-          use: LOCATION_TYPES.CURRENT
-        }),
-        queryParams: {
-          point: {
-            coordinates: state.location.point,
-          },
-          sortBy: 'BEST',
-        }
-      });
-    case ACTIONS.USE_OTHER_LOCATION: 
-      return Object.assign({}, state, {
-        location: Object.assign({}, state.location, {
-          use: LOCATION_TYPES.OTHER,
-        }),
-        queryParams: {
-          sortBy: 'TIME',
+        search: {
+          type: LOCATION_TYPES.OTHER,
+          typeOptions: LOCATION_STATUS_OPTIONS[LOCATION_STATUS.NOT_FOUND],
         },
+        queryParams: {
+          sortBy: LOCATION_TYPE_OPTIONS[LOCATION_TYPES.OTHER].defaultSort,
+        },
+      });
+    case ACTIONS.USE_SEARCH_TYPE:
+      pointParam = state.location.point ? { point: { coordinates: state.location.point } } : {};
+      return Object.assign({}, state, {
+        search: {
+          type: action.searchType,
+          typeOptions: LOCATION_STATUS_OPTIONS[state.location.foundLocation],
+        },
+        queryParams: Object.assign({}, pointParam, {
+          sortBy: LOCATION_TYPE_OPTIONS[action.searchType].defaultSort,
+        }),
       });
     case ACTIONS.SET_OTHER_LOCATION: 
       return Object.assign({}, state, {
