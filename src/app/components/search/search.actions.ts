@@ -65,7 +65,9 @@ export const ACTIONS = {
 @Injectable()
 export class SearchActions {
 
-  constructor(private ngRedux: NgRedux<any>) {}
+  constructor(
+    private ngRedux: NgRedux<any>
+  ) {}
 
   public getNgRedux(): NgRedux<any> {
     return this.ngRedux;
@@ -100,8 +102,8 @@ export class SearchActions {
           return;
         }
         const point: number[] = [ 
+          get(result, 'coords.longitude', 0.0),
           get(result, 'coords.latitude', 0.0),
-          get(result, 'coords.longitude', 0.0) 
         ]
         dispatch(this.foundLocation(point));
       });
@@ -164,6 +166,7 @@ export class SearchActions {
       name: name
     });  
   };
+
 };
 
 const initialState: IState = {
@@ -193,7 +196,7 @@ export function searchReducer(state: IState = initialState, action: ISearchActio
           typeOptions: LOCATION_STATUS_OPTIONS[LOCATION_STATUS.FOUND],
         },
         queryParams: Object.assign({}, pointParam, {
-          sortBy: LOCATION_TYPE_OPTIONS[action.searchType].defaultSort,
+          sortBy: LOCATION_TYPE_OPTIONS[LOCATION_TYPES.CURRENT].defaultSort,
         }),
       });
     case ACTIONS.NOT_FOUND_LOCATION:
@@ -212,7 +215,8 @@ export function searchReducer(state: IState = initialState, action: ISearchActio
         },
       });
     case ACTIONS.USE_SEARCH_TYPE:
-      pointParam = state.location.point ? { point: { coordinates: state.location.point } } : {};
+      pointParam = state.location.point && LOCATION_TYPE_OPTIONS[action.searchType].pointNeeded ? 
+				{ point: { coordinates: state.location.point } } : {};
       return Object.assign({}, state, {
         search: {
           type: action.searchType,
@@ -225,6 +229,7 @@ export function searchReducer(state: IState = initialState, action: ISearchActio
     case ACTIONS.SET_OTHER_LOCATION: 
       return Object.assign({}, state, {
         queryParams: Object.assign({}, state.queryParams, {
+					point: undefined,
           city: action.city,
           state: action.state,
         }),
