@@ -9,15 +9,14 @@ import {
   OnInit
 } from '@angular/core';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { Apollo, ApolloQueryObservable} from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
-import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
+import * as ApolloClientRxJS from 'apollo-client-rxjs';
 import { RxObservableQuery } from 'apollo-client-rxjs';
-import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/debounceTime';
 import 'apollo-client-rxjs';
 // MISAS modules 
 import { LoadingBar } from '../../services/loading-bar';
@@ -38,7 +37,7 @@ import { SearchActions } from './search.actions';
   providers: [ SearchActions ],
   animations: SearchAnimations,
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent {
   @Input('queryBounds') queryBounds: Number[][];
   // current location info
   locationValue: any = {};
@@ -55,11 +54,12 @@ export class SearchComponent implements OnInit {
   public searchType: string;
   public searchTypes: string[];
   public sortBy: string;
+  public cityStateChanged = new Subject<string>();
+  public nameChanged = new Subject<string>();
   public LocationStatusOptions: any = LOCATION_STATUS_OPTIONS;
   public LocationTypeOptions: any = LOCATION_TYPE_OPTIONS;
-  public animationOptions: any = {};
   public SortOptions: any = SORT_OPTIONS;
-  private searchOptions: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  public animationOptions: any = {};
   // grps property
   private grpsObs: Observable<ApolloQueryResult<any>>;
   private grpsSub: any;
@@ -79,7 +79,6 @@ export class SearchComponent implements OnInit {
 	constructor(
     public loadingBar: LoadingBar,
 		private apollo: Apollo, 
-		private fb: FormBuilder,
     private router: Router,
     private r: ActivatedRoute,
 		public actions: SearchActions
@@ -97,14 +96,29 @@ export class SearchComponent implements OnInit {
     let ngRedux = this.actions.getNgRedux();
     ngRedux.subscribe(() => {
       let state = ngRedux.getState();
-      console.log('got updated state');
-      console.log(state);
       let foundLocation = get(state, 'location.foundLocation', undefined);
       this.locationDetermined = foundLocation == LOCATION_STATUS.FOUND || foundLocation == LOCATION_STATUS.NOT_FOUND;
       this.searchType = get(state, 'search.type', undefined);
       this.searchTypes = get(state, 'search.typeOptions', undefined);
       this.sortBy = get(state, 'queryParams.sortBy', undefined);
+			if (state.queryParams)
+				this._switchQuery(state.queryParams);
     });
+
+		this.cityStateChanged
+			.debounceTime(300) // wait 300ms after the last event before emitting last event
+			.distinctUntilChanged() // only emit if value is different from previous value
+			.subscribe((cityState) => {
+				let [city, state] = cityState.split(',');
+				this.actions.setOtherLocation(city, state);
+			});
+
+		this.nameChanged
+			.debounceTime(300) // wait 300ms after the last event before emitting last event
+			.distinctUntilChanged() // only emit if value is different from previous value
+			.subscribe((name) => {
+				this.actions.setName(name);
+			});
      
 		if (isEmpty(s.queryParams)) {
 			actions.initial();
@@ -113,18 +127,9 @@ export class SearchComponent implements OnInit {
 		}
 		// get GPS location if possible
 		actions.findLocation();
-		/*
-		this.searchForm = this.fb.group({
-			name: '',
-      cityState: '',
-			city: '',
-			state: '',
-			useMap: true,
-			sortBy: '',
-			polygon: null,
-			locationOption: '' 
-		});
 
+		/*
+    
     this.searchFormSubscribe();
 
     if (locationOption !== '')
@@ -148,45 +153,41 @@ export class SearchComponent implements OnInit {
 
         
     // setup search grps 
-    this.searchOptions.subscribe((options) => {
-      this._switchQuery(options);
-    });
 		*/
   };
 
-  ngOnInit(): void {
-		/*
-    // currently getting location flag
-    this.gettingLocation = true;
-    // setup to get current location 
-    this.searchFields.fieldEvents((result) => {
-      if (!result || !(result.location)) {
-        this.gettingLocation = false;
-        return;
-      }
-      let location = result.location;
-      let lat = get(result, 'location.lat', 0.0);
-      let lon = get(result, 'location.lon', 0.0);
-      if (lat != 0.0 && lon != 0.0) {
-        this.location = { coordinates: [lon, lat] };
-        this.gettingLocation = true;
-        // only use location when using the current location option
-        if (this.locationOption === 'CURRENT_LOCATION') {
-          if (!this.sortBy || this.sortBy === '') {
-            this.sortBy = 'BEST';
-          }
-          console.log('sending next search options');
-          // directly send new options
-          this.searchOptions.next({
-            point: this.location,
-            sort_by: this.sortBy 
-          });
-        }
-      } else if (this.locationOption === '') {
-        this.gettingLocation = false;
-      }
+	public _switchQuery(options) {
+    // check if we got any options
+    this.loadingBar.reset();
+    this.loadingBar.addLoading();
+    if (isNil(options) || isEmpty(options)){
+      this.grps = {};
+      this.loadingBar.removeLoading();
+      return;
+    }
+    // unsubscribe from previous query if we are subscribed
+    if (!isNil(this.grpsObs)){
+      this.grpsSub.unsubscribe();
+    }
+
+    this.grpsObs = this.apollo.query<any>({
+      query: SearchGrps,
+      variables: options,
     });
-		*/
-  };
-    
+    // subscribe to the new query to get results
+    this.grpsSub = this.grpsObs.subscribe(
+      ({data, loading}) => {
+        this.loadingBar.removeLoading();
+        this.grps = get(data,'searchGrps', null);
+      }
+    );
+	};
+
+	public cityStateChange(field: string){
+		this.cityStateChanged.next(field);
+	}	
+
+	public nameChange(field: string){
+		this.nameChanged.next(field);
+	}	
 };

@@ -19,8 +19,10 @@
           </mdl-select>
         </div>
         <!-- location search field -->
-        <div class="mdl-cell mdl-cell--12-col mdl-cell--bottom" [@flyInLeft]="animationOptions.citySearchState">
-          <mdl-textfield placeholder="Ciudad, estado en Mexico">
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--bottom" 
+					*ngIf="LocationTypeOptions[searchType].cityStateSearch" 
+					[@flyInLeft]="animationOptions.citySearchState">
+          <mdl-textfield [ngModel]="cityState" (ngModelChange)="cityStateChange($event)" placeholder="Ciudad, estado en Mexico">
           </mdl-textfield>
         </div>
       </div>
@@ -39,7 +41,7 @@
          class="mdl-cell mdl-cell--4-col mdl-cell--4-offset-tablet mdl-cell--bottom" 
          *ngIf="SortOptions[sortBy].needName"
          [@flyInUp]="animationOptions.sortOptionsState">
-      <mdl-textfield type="text" 
+      <mdl-textfield [ngModel]="name" (ngModelChange)="actions.setName($event)" type="text" 
                      placeholder="Nombre de parroquia">
       </mdl-textfield>
     </div>
