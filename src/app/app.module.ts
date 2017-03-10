@@ -35,9 +35,11 @@ import { MapComponent } from './components/map';
 import { ListComponent } from './components/list';
 import { GrpDetailComponent } from './components/grp-detail';
 import { LocaleDate } from './pipes/locale.date';
-
+import * as moment from 'moment';
+import 'moment/locale/es';
 import '../styles/styles.scss';
 
+moment.locale('en');
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,

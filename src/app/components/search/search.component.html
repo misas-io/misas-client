@@ -1,7 +1,12 @@
-<div *ngIf="!locationDetermined && !searchType">
-	<h3>obteniendo localizacion... porfavor espere</h3>
+<div *ngIf="!locationDetermined && !searchType" style="text-align: center;">
+  <div>
+    <mdl-icon [@appear]="animationOptions.locationSearching" style="font-size: 60px;">
+      location_searching
+    </mdl-icon>
+  </div>
+  <span>buscando localizacion</span>
 </div>
-<div [mdl-shadow]="3" *ngIf="locationDetermined && searchType">
+<div [mdl-shadow]="3" *ngIf="locationDetermined && searchType" [@flyInUp]="animationOptions.searchBar">
   <div class="mdl-grid">
     <div class="mdl-cell mdl-cell--4-col mdl-cell--stretch">
       <div id="location-options" class="mdl-grid mdl-grid--no-spacing" style="min-height: 100%;">

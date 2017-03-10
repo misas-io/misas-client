@@ -24,7 +24,7 @@ export const LOCATION_TYPE_OPTIONS = {
     cityStateSearch: false,
 		pointNeeded: true,
     sorts: ['BEST', 'TIME', 'NEAR'],
-    defaultSort: 'BEST',
+    defaultSort: 'NEAR',
   },
   OTHER_LOCATION: {
     title: 'Otra Localizacion',

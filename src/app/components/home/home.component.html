@@ -18,7 +18,7 @@
     <grps-list [grps]="grps"></grps-list>
   </div>
   <!-- map showing grps -->
-  <div mdl-shadow="2" class="mdl-cell mdl-cell--5-col mdl-cell--4-col-tablet mdl-cell--4-col-phone home-map-container">
+  <div *ngIf="grps" mdl-shadow="2" class="mdl-cell mdl-cell--5-col mdl-cell--4-col-tablet mdl-cell--4-col-phone home-map-container">
     <grps-map [grps]="grps" 
               [currentLocation]="currentLocation"
               (boundsChanged)="queryBounds">
