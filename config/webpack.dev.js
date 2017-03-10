@@ -115,7 +115,7 @@ module.exports = function (options) {
     },
 
     plugins: [
-
+      // restrict the extra locales that moment.js can load; en is always builtin
       /**
        * Plugin: DefinePlugin
        * Description: Define free variables.

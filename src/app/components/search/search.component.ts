@@ -98,6 +98,10 @@ export class SearchComponent {
       let state = ngRedux.getState();
       let foundLocation = get(state, 'location.foundLocation', undefined);
       this.locationDetermined = foundLocation == LOCATION_STATUS.FOUND || foundLocation == LOCATION_STATUS.NOT_FOUND;
+      if (this.locationDetermined)
+        this.loadingBar.reset();
+      else 
+        this.loadingBar.addLoading();
       this.searchType = get(state, 'search.type', undefined);
       this.searchTypes = get(state, 'search.typeOptions', undefined);
       this.sortBy = get(state, 'queryParams.sortBy', undefined);
