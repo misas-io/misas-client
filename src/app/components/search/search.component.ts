@@ -3,21 +3,15 @@ import {
   Component, 
   Input, 
   Output, 
-  OnChanges, 
-  SimpleChange, 
-  EventEmitter, 
-  OnInit
+  EventEmitter
 } from '@angular/core';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { Apollo, ApolloQueryObservable} from 'apollo-angular';
+import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
-import * as ApolloClientRxJS from 'apollo-client-rxjs';
-import { RxObservableQuery } from 'apollo-client-rxjs';
 import 'rxjs/add/operator/debounceTime';
-import 'apollo-client-rxjs';
 // MISAS modules 
 import { LoadingBar } from '../../services/loading-bar';
 import { 
