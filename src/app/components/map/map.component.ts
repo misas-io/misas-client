@@ -1,4 +1,3 @@
-import { get, isNil } from 'lodash';
 import { 
   Component, 
   Output,
@@ -10,6 +9,7 @@ import {
 import { LatLngBounds, LatLng, MapsAPILoader } from 'angular2-google-maps/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import "rxjs/add/operator/debounceTime";
+import isNil = require('lodash/isNil');
 // MISAS modules
 import { style } from './map.component.style';
 

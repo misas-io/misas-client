@@ -1,4 +1,3 @@
-import { set, get, isEqual, isNil, isEmpty } from 'lodash';
 import { 
   Component, 
   Input, 
@@ -12,6 +11,10 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import get = require('lodash/get');
+import isNil = require('lodash/isNil');
+import isEmpty = require('lodash/isEmpty');
 // MISAS modules 
 import { LoadingBar } from '../../services/loading-bar';
 import { 

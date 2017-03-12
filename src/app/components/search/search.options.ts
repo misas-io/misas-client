@@ -1,5 +1,3 @@
-import {get, findIndex } from 'lodash';
-
 export const LOCATION_TYPES = {
   CURRENT: 'CURRENT_LOCATION',
   OTHER: 'OTHER_LOCATION',

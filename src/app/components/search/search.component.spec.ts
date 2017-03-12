@@ -10,7 +10,6 @@ import { FormsModule } from '@angular/forms';
 import { MdlModule } from 'angular2-mdl';
 import { MdlPopoverModule } from '@angular2-mdl-ext/popover';
 import { MdlSelectModule } from '@angular2-mdl-ext/select';
-import { ReactiveFormsModule } from '@angular/forms'; 
 import { Router, ActivatedRoute } from '@angular/router';
 import util from 'util';
 import { ApolloModule } from 'apollo-angular';
@@ -117,7 +116,6 @@ describe('Search', () => {
       declarations: [ SearchComponent ],
       imports: [
         FormsModule,
-        ReactiveFormsModule,
         MdlModule,
         MdlPopoverModule,
         MdlSelectModule,
