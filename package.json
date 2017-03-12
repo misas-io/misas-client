@@ -16,7 +16,7 @@
     "build:prod": "webpack --config config/webpack.prod.js --profile --bail",
     "build": "npm run build:dev",
     "ci": "npm run lint && npm test && npm run e2e",
-    "clean:dist": "npm run rimraf -- dist",
+    "clean:dist": "rimraf dist/*",
     "clean:install": "npm set progress=false && npm install",
     "clean:start": "npm start",
     "clean": "npm cache clean && npm run rimraf -- node_modules doc coverage dist",

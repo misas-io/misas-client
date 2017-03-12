@@ -141,29 +141,29 @@ export class SearchActions {
     console.log(searchType);
     this.ngRedux.dispatch({
       type: ACTIONS.USE_SEARCH_TYPE,
-      searchType: searchType,
+      searchType,
     });  
   };
 
   public setOtherLocation(city: string, state: string){
     this.ngRedux.dispatch({
       type: ACTIONS.SET_OTHER_LOCATION,
-      city: city,
-      state: state,
+      city,
+      state,
     });  
   };
 
   public setSortBy(sortBy: string){
     this.ngRedux.dispatch({
       type: ACTIONS.SET_SORT_BY,
-      sortBy: sortBy,
+      sortBy,
     });  
   };
 
   public setName(name: string){
     this.ngRedux.dispatch({
       type: ACTIONS.SET_NAME,
-      name: name
+      name
     });  
   };
 
@@ -173,7 +173,7 @@ const initialState: IState = {
   path: 'search',
 };
 
-export function searchReducer(state: IState = initialState, action: ISearchAction): any {
+export function searchReducer(state: IState = initialState, action: ISearchAction): IState {
   let pointParam;
   switch (action.type) {
     case ACTIONS.FIND_LOCATION:
