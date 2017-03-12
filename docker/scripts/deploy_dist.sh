@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 source './docker/scripts/common_container_utils.sh'
+load_misas_client_env_file
 set -x
 set -e
-load_misas_client_env_file
 echo "removing s3 files from bucket"
 docker run --rm \
            -v `name_misas_client_env_aws_dir`:/root/.aws/ \

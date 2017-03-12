@@ -82,9 +82,10 @@ name_misas_client_env_aws_dir(){
 }
 
 load_misas_client_env_file(){
-  local ENV_FILE
+  local ENV_FILE 
   ENV_FILE=""
   if [ "$JOB_BASE_NAME" != "develop" -a "$JOB_BASE_NAME" != "master" ]; then
+    echo "set ENV_FOLDER to pwd"
     ENV_FILE="misas-client.io.env"
   else
     ENV_FILE="misas-client.io.${JOB_BASE_NAME}.env"
