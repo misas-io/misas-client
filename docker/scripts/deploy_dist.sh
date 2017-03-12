@@ -13,7 +13,7 @@ docker run --rm \
            --env-file `name_misas_client_env_file` \
            -v `name_misas_client_env_aws_dir`:/root/.aws/ \
            -v `pwd`/dist/:/project/ \
-           `gen_aws_cli_image_name` s3 sync . `gen_aws_s3_url`/ 
+           `gen_aws_cli_image_name` s3 sync . `gen_aws_s3_url`/ --acl "public-read"
 echo "invalidating cloudfront"
 docker run --rm \
            --env-file `name_misas_client_env_file` \
