@@ -5,11 +5,6 @@
 const helpers = require('./helpers');
 const webpackMerge = require('webpack-merge'); // used to merge webpack configs
 const commonConfig = require('./webpack.common.js'); // the settings that are common to prod and dev
-const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-const secretAccessKey = process.env.AWS_SECRET_KEY;
-const bucketName = process.env.AWS_BUCKET_NAME;
-const bucketRegion = process.env.S3_REGION || 'us-east-1';
-
 /**
  * Webpack Plugins
  */
@@ -23,8 +18,6 @@ const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
 const V8LazyParseWebpackPlugin = require('v8-lazy-parse-webpack-plugin');
-const S3Plugin = require('webpack-s3-plugin');
-const s3 = require('s3');
 /**
  * Webpack Constants
  */
@@ -37,124 +30,6 @@ const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
   ENV: ENV,
   HMR: false
 });
-
-class RemoveAllS3Objects {
-
-	compileError(compilation, error) {
-		compilation.errors.push(new Error(error));
-	}
-
-	apply(compiler) {
-		let objects = [];
-		let toDelete = [];
-		let result;
-		// Setup callback for accessing a compilation:
-		compiler.plugin("after-emit", (compilation, cb) => {
-
-			console.log('\nBegin removing S3 Objects from Bucket');
-			let client = s3.createClient({
-				s3Options: {
-					accessKeyId: accessKeyId,
-					secretAccessKey: secretAccessKey,
-					region: bucketRegion
-				},
-			});
-			/**
-			 * removeObjects
-			 */
-			let removeObjects = (data) => {
-				// extract keys of all onjects in bucket
-				console.log('here...');
-				if(data.Contents) {
-					objects = objects.concat(data.Contents);
-				}
-				console.log('Got objects, extracting keys...');
-				let length = objects.length;
-				if(!length) {
-					cb();
-					return;
-				}
-				for(var i = 0; i < length; i++) {
-					toDelete.push({Key: objects[i].Key});
-				}
-				length = toDelete.length;
-				console.log('Deleting ' + length + ' files...');
-				if(!length) {
-					console.log('No files to delete, bucket empty.');
-					cb();
-					return;
-				}
-				// config delete, and delete the objects
-				let s3 = client.deleteObjects({
-					Bucket: bucketName,
-					Delete: {
-						Objects: toDelete
-					}
-				});
-				s3.on('error', (err) => {
-					this.compileError(compilation, 'Could not delete elements from the S3 Bucket');
-					cb();
-				});
-				s3.on('end', () => {
-					console.log('All files were deleted.');
-					cb();
-				});
-			};
-			/**
-			 * listObjects
-			 */
-			let listObjects = () => {	
-				console.log(`Getting list of Objects from in ${bucketName}`);
-				let s3 = client.listObjects({
-					recursive: true,
-					s3Params: {
-						Bucket: bucketName
-					}
-				});
-				s3.on('error',(err) => {
-					this.compileError(compilation, 'Could not retrieve objects from specified S3 Bucket');
-					cb();
-				});
-				s3.on('data', (data) => { result = data; });
-				s3.on('end', () => { console.log('Got list of Objects from S3 Bucket'); removeObjects(result); });
-			};
-			// listObjects
-			listObjects();
-		});
-	}
-}
-
-const optionalPlugins = [];
-
-if (
-  accessKeyId &&
-  secretAccessKey && 
-  bucketName &&
-  bucketRegion 
-) {
-  optionalPlugins.push(
-    new RemoveAllS3Objects()
-  );
-  /*
-   * Upload files to S3
-   */
-  optionalPlugins.push(
-    new S3Plugin({
-      s3Options: {
-        accessKeyId: accessKeyId,
-        secretAccessKey: secretAccessKey,
-        region: bucketRegion,
-      },
-      s3UploadOptions: {
-        Bucket: bucketName 
-      },
-      cloudfrontInvalidateOptions: {
-        DistributionId: process.env.AWS_CLOUDFRONT_DIST_ID,
-        Items: ["/*"]
-      }
-    })
-  );
-}
 
 module.exports = function (env) {
   return webpackMerge(commonConfig({env: ENV}), {
@@ -419,7 +294,6 @@ module.exports = function (env) {
 
         }
       }),
-      ...optionalPlugins,
     ],
 
     /*

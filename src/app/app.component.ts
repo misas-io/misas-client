@@ -28,7 +28,7 @@ import { LoadingBar } from './services/loading-bar';
     <mdl-layout-content>
       <mdl-progress *ngIf="loadingBar.loading" [indeterminate]="loadingBar.loading" style="width: 100%;"></mdl-progress>
       <!-- Your content goes here -->
-      <main>
+      <main style="min-height: 100vh;">
         <router-outlet class='contentfilterinator-container'></router-outlet>
       </main>
 

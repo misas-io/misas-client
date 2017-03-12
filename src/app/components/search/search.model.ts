@@ -5,12 +5,12 @@ query SearchGrps(
   $name: String, 
   $point: PointI, 
   $polygon: PolygonI,
-  $sort_by: SortTypes
+  $sortBy: SortTypes
   $city: String,
   $state: String
 ){
   searchGrps(
-    sortBy: $sort_by,
+    sortBy: $sortBy,
     state: $state,
     city: $city,
     name: $name,

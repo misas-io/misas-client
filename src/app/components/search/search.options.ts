@@ -1,88 +1,61 @@
 import {get, findIndex } from 'lodash';
 
-export const LocationOptions: any[] = [ 
-  {
+export const LOCATION_TYPES = {
+  CURRENT: 'CURRENT_LOCATION',
+  OTHER: 'OTHER_LOCATION',
+};
+
+export const LOCATION_STATUS = {
+  FOUND: 'FOUND',
+  NOT_FOUND: 'NOT_FOUND',
+  LOOKING: 'LOOKING',
+};
+
+export const LOCATION_STATUS_OPTIONS = {
+  FOUND: ['CURRENT_LOCATION', 'OTHER_LOCATION'],
+  NOT_FOUND: ['OTHER_LOCATION'],
+};
+
+export const LOCATION_TYPE_OPTIONS = {
+  CURRENT_LOCATION: {
     title: 'Mi Localizacion',
-    object: { 
-      value: 'CURRENT_LOCATION',
-      icon: 'location_searching',
-      cityStateSearch: false,
-      sorts: ['BEST', 'TIME', 'NEAR'],
-      defaultSort: 'BEST',
-    },
+    value: 'CURRENT_LOCATION',
+    icon: 'location_searching',
+    cityStateSearch: false,
+		pointNeeded: true,
+    sorts: ['BEST', 'TIME', 'NEAR'],
+    defaultSort: 'NEAR',
   },
-  {
+  OTHER_LOCATION: {
     title: 'Otra Localizacion',
-    object: { 
-      value: 'OTHER_LOCATION',
-      icon: 'location_city',
-      cityStateSearch: true,
-      sorts: ['TIME', 'RELEVANCE'],
-      defaultSort: 'TIME',
-    },
-  }/*,
-  {
-    title: 'Localizacion Compartida',
-    object: { 
-      value: 'SHARED_LOCATION',
-      icon: 'explore',
-    },
-  }
- */
-];
-
-export function getLocationOption(value: string): any {
-  let i = findIndex(LocationOptions, (locationOption) => {
-    let optionValue = get(locationOption, 'object.value');
-    return optionValue && optionValue === value; 
-  });
-  return LocationOptions[i];
+    value: 'OTHER_LOCATION',
+    icon: 'location_city',
+    cityStateSearch: true,
+		pointNeeded: false,
+    sorts: ['TIME', 'RELEVANCE'],
+    defaultSort: 'TIME',
+  },
 };
 
-export function getLocationOptionSortOptions(value: string): Array<any> {
-  let sorts: Array<any> = get(getLocationOption(value),'object.sorts',[]);
-  return SortOptions.filter(option => {
-    return sorts.indexOf(option.value) > -1;
-  });
-};
-
-export function isCitySearchVisible(locationOption: string, sortOption: string){
-  if ('OTHER_LOCATION' === locationOption){
-    return true;
-  }
-  return false;
-};
-
-export const SortOptions: any[] = [
-  {
+export const SORT_OPTIONS: any = {
+  BEST: {
     title: 'Mas cercanas con el evento mas temprano',
     value: 'BEST',
-    needPoint: true,
   },
-  {
+  RELEVANCE: {
     title: 'Nombre mas parecido',
-    value: 'RELEVANCE'
+    value: 'RELEVANCE',
+    needName: true,
   },
-  {
+  NEAR: {
     title: 'Mas cercanas',
     value: 'NEAR',
-    needPoint: true,
   },
-  {
+  TIME: {
     title: 'Evento mas temprano',
     value: 'TIME'
   },
-];
-
-export function getSortOption(value: string): any {
-  let i = findIndex(SortOptions, (sortOption) => {
-    let optionValue = get(sortOption, 'value');
-    return optionValue && optionValue === value; 
-  });
-  return SortOptions[i];
 };
-
-
 
 export const EventTypeOptions: any[] = [
   {
