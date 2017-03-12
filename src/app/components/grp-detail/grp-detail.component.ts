@@ -1,10 +1,12 @@
-import { set, get, isEqual, isNil, isEmpty } from 'lodash';
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot, Params } from '@angular/router';
 import { Apollo, ApolloQueryObservable} from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
+import get = require('lodash/get');
+import isNil = require('lodash/isNil');
+import isEmpty = require('lodash/isEmpty');
 /* MISAS modules */
 import { Grp } from './grp-detail.model';
 import { LoadingBar } from '../../services/loading-bar';

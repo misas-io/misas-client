@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { get } from 'lodash';
 import { Action } from 'redux';
 //import { ThunkAction } from 'redux-thunk';
 import { NgRedux } from '@angular-redux/store';
 import * as BrowserLocation from 'browser-location';
+import get = require('lodash/get');
+// MISAS modules
 import { 
   LOCATION_TYPES,  
   LOCATION_STATUS, 
