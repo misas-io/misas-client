@@ -12,8 +12,10 @@ node {
     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage/html/', reportFiles: 'index.html', reportName: 'Code Coverage Reports'])
     junit 'tests/**/test-results.xml'
   }
-  stage('deploy assets') {
-    sh './docker/scripts/deploy_container.sh'
+  stage('build dist') {
+    sh './docker/scripts/build_dist.sh'
   }
-
+  stage('deploy dist') {
+    sh './docker/scripts/deploy_dist.sh'
+  }
 }

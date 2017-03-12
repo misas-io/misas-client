@@ -11,7 +11,7 @@ package_version(){
 gen_image_name(){
   if [ "$JOB_BASE_NAME" != "develop" -a "$JOB_BASE_NAME" != "master" ]; then
     echo "$MISAS_BASE:`package_version`_0"
-		return
+    return
   fi
   if [ -z "${BUILD_NUMBER}" ]; then
     echo "Error: env variable BUILD_NUMBER required" 1>&2
@@ -35,14 +35,49 @@ get_misas_env(){
   esac    # --- end of case ---
 }
 
+gen_aws_cli_image_name(){
+  if [ -z "${AWS_CLI_DOCKER_IMAGE}" ]; then
+    echo "victor755555/aws-cli"
+    return;
+  fi
+  echo "$AWS_CLI_DOCKER_IMAGE"
+}
+
+gen_aws_s3_url(){
+  if [ -z "${AWS_BUCKET_NAME}" ]; then
+    echo "s3://fake.misas.io"
+    return;
+  fi
+  echo "s3://$AWS_BUCKET_NAME"
+}
+
+gen_aws_cf_id(){
+  if [ -z "${AWS_CLOUDFRONT_DIST_ID}" ]; then
+    echo "zzzzzzzzzzzzz"
+    return;
+  fi
+  echo "${AWS_CLOUDFRONT_DIST_ID}"
+}
+
 name_misas_client_env_file(){
   local ENV_FILE
   ENV_FILE=""
   if [ "$JOB_BASE_NAME" != "develop" -a "$JOB_BASE_NAME" != "master" ]; then
     echo "misas-client.io.env"
-		return
+    return
   fi
   ENV_FILE="misas-client.io.${JOB_BASE_NAME}.env"
+  echo "$ENV_FOLDER/$ENV_FILE"
+}
+
+name_misas_client_env_aws_dir(){
+  local ENV_FILE
+  ENV_FILE=""
+  if [ "$JOB_BASE_NAME" != "develop" -a "$JOB_BASE_NAME" != "master" ]; then
+    echo "`pwd`/misas-client.io.aws/"
+    return
+  fi
+  ENV_FILE="misas-client.io.${JOB_BASE_NAME}.aws/"
   echo "$ENV_FOLDER/$ENV_FILE"
 }
 
@@ -50,9 +85,10 @@ load_misas_client_env_file(){
   local ENV_FILE
   ENV_FILE=""
   if [ "$JOB_BASE_NAME" != "develop" -a "$JOB_BASE_NAME" != "master" ]; then
-    exit -1;
+    ENV_FILE="misas-client.io.env"
+  else
+    ENV_FILE="misas-client.io.${JOB_BASE_NAME}.env"
   fi
-  ENV_FILE="misas-client.io.${JOB_BASE_NAME}.env"
   set +x
   while read env; do
     export $env
