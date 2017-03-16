@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@angular-redux/router@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@angular-redux/router/-/router-6.0.1.tgz#7b6a4b1b8eb99a8460f61619de02d87a1a0e013d"
+
 "@angular-redux/store@^6.0.1":
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/@angular-redux/store/-/store-6.0.1.tgz#42df3053efd06bb71edaae1c52039b1f8eb2cae4"
