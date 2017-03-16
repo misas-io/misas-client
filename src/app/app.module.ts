@@ -12,6 +12,7 @@ import { ResponsiveModule, ResponsiveConfig, ResponsiveConfigInterface } from 'n
 import { MdlSelectModule } from '@angular2-mdl-ext/select';
 import { MdlPopoverModule } from '@angular2-mdl-ext/popover';
 import { NgReduxModule, NgRedux } from '@angular-redux/store'; 
+import { NgReduxRouterModule, NgReduxRouter } from '@angular-redux/router';
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -92,6 +93,7 @@ let config: ResponsiveConfigInterface = {
     MdlPopoverModule,
     MdlSelectModule,
 		NgReduxModule,
+    NgReduxRouterModule,
     AgmCoreModule.forRoot({
       apiKey: process.env.GOOGLE_API_KEY 
     }),
@@ -107,9 +109,11 @@ export class AppModule {
   constructor(
 		public appRef: ApplicationRef, 
 		public appState: AppState,
-		public NgRedux: NgRedux<IState>
+		public NgRedux: NgRedux<IState>,
+    public ngReduxRouter: NgReduxRouter
 	) {
 		configureStore(this.NgRedux);
+    this.ngReduxRouter.initialize();
 	}
 
   hmrOnInit(store: StoreType) {

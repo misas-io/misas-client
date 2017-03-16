@@ -174,6 +174,10 @@ const initialState: IState = {
   path: 'search',
 };
 
+function paramsUpdate(state, newParams){
+  return Object.assign({}, state.params, newParams);
+};
+
 export function searchReducer(state: IState = initialState, action: ISearchAction): IState {
   let pointParam;
   switch (action.type) {
@@ -249,11 +253,11 @@ export function searchReducer(state: IState = initialState, action: ISearchActio
       });
     // INITIAL ACTIONS
     case ACTIONS.INITIAL_WITH_PARAMS:
-      return Object.assign({}, state, {
-        params: action.params,    
-      });
+      console.log(action.params.state);
+      return Object.assign({}, state, action.params.state);
     case ACTIONS.INITIAL:
-    default:    
       return initialState;
+    default:    
+      return Object.assign({}, state);
   }    
 };
