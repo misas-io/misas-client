@@ -13,6 +13,7 @@ import { MdlSelectModule } from '@angular2-mdl-ext/select';
 import { MdlPopoverModule } from '@angular2-mdl-ext/popover';
 import { NgReduxModule, NgRedux } from '@angular-redux/store'; 
 import { NgReduxRouterModule, NgReduxRouter } from '@angular-redux/router';
+import { CalendarComponent } from "angular2-fullcalendar/src/calendar/calendar";
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -80,6 +81,7 @@ let config: ResponsiveConfigInterface = {
     LocaleDate,
     GrpDetailComponent,
 		PrivacyAndTermsComponent,
+    CalendarComponent
   ],
   imports: [ // import Angular's modules
     ApolloModule.withClient(getClient),

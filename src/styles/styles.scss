@@ -17,4 +17,5 @@ $grid-tablet-breakpoint: 510px;
 @import './../../node_modules/angular2-mdl/scss/material-design-lite';
 @import './../../node_modules/@angular2-mdl-ext/popover/popover';
 @import './../../node_modules/@angular2-mdl-ext/select/select';
-
+@import './../../node_modules/fullcalendar/dist/fullcalendar';
+@import './materialFullCalendar';

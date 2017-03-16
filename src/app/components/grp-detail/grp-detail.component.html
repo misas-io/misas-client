@@ -1,9 +1,16 @@
 <div *ngIf="grp" >
-  <h3> {{ grp.name }} </h3>
-  <div *ngIf="grp.address">
-    {{ grp.address.address_line_1 }},
-    {{ grp.address.city }},
-    {{ grp.address.state }}
+  <div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--6-col">
+      <h3> {{ grp.name }} </h3>
+      <div *ngIf="grp.address">
+        {{ grp.address.address_line_1 }},
+        {{ grp.address.city }},
+        {{ grp.address.state }}
+      </div>
+    </div>
+    <div class="mdl-cell mdl-cell--6-col">
+      <angular2-fullcalendar [options]="calendarOptions"></angular2-fullcalendar>
+    </div>
   </div>
   <div>
     <!-- {{ grp | json }} -->
