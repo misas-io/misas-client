@@ -1,17 +1,22 @@
-import { set, get, isEqual, isNil, isEmpty } from 'lodash';
 import { 
   Component, 
   Input, 
   Output, 
-  EventEmitter
+  EventEmitter,
+  OnDestroy
 } from '@angular/core';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { Unsubscribe } from 'redux';
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import get = require('lodash/get');
+import isNil = require('lodash/isNil');
+import isEmpty = require('lodash/isEmpty');
 // MISAS modules 
 import { LoadingBar } from '../../services/loading-bar';
 import { 
@@ -31,7 +36,7 @@ import { SearchActions } from './search.actions';
   providers: [ SearchActions ],
   animations: SearchAnimations,
 })
-export class SearchComponent {
+export class SearchComponent implements OnDestroy  {
   @Input('queryBounds') queryBounds: Number[][];
   // current location info
   locationValue: any = {};
@@ -56,7 +61,9 @@ export class SearchComponent {
   public animationOptions: any = {};
   // grps property
   private grpsObs: Observable<ApolloQueryResult<any>>;
-  private grpsSub: any;
+  private grpsSub: Subscription;
+  private stateSub: Unsubscribe;
+  private subscriptions: { [key: string]: Subscription } = {};
   grpsValue: any = {};
   @Output() grpsChange: EventEmitter<any> = new EventEmitter<any>();
 	@Input()
@@ -88,8 +95,8 @@ export class SearchComponent {
 		*/
     // setup variables based on state
     let ngRedux = this.actions.getNgRedux();
-    ngRedux.subscribe(() => {
-      let state = ngRedux.getState();
+    this.stateSub = ngRedux.subscribe(() => {
+      let state = ngRedux.getState().search;
       let foundLocation = get(state, 'location.foundLocation', undefined);
       this.locationDetermined = foundLocation == LOCATION_STATUS.FOUND || foundLocation == LOCATION_STATUS.NOT_FOUND;
       if (this.locationDetermined)
@@ -99,11 +106,17 @@ export class SearchComponent {
       this.searchType = get(state, 'search.type', undefined);
       this.searchTypes = get(state, 'search.typeOptions', undefined);
       this.sortBy = get(state, 'queryParams.sortBy', undefined);
+      this.router.navigate([], {
+        queryParams: {
+          state: JSON.stringify(state)
+        },
+        relativeTo: this.r
+      });
 			if (state.queryParams)
 				this._switchQuery(state.queryParams);
     });
 
-		this.cityStateChanged
+		this.subscriptions['cityState'] = this.cityStateChanged
 			.debounceTime(300) // wait 300ms after the last event before emitting last event
 			.distinctUntilChanged() // only emit if value is different from previous value
 			.subscribe((cityState) => {
@@ -111,7 +124,7 @@ export class SearchComponent {
 				this.actions.setOtherLocation(city, state);
 			});
 
-		this.nameChanged
+		this.subscriptions['nameChanged'] = this.nameChanged
 			.debounceTime(300) // wait 300ms after the last event before emitting last event
 			.distinctUntilChanged() // only emit if value is different from previous value
 			.subscribe((name) => {
@@ -120,39 +133,14 @@ export class SearchComponent {
      
 		if (isEmpty(s.queryParams)) {
 			actions.initial();
+      // get GPS location if possible
+      actions.findLocation();
 		} else {
-			actions.initialWithParams(s.queryParams);
+      let state = JSON.parse(decodeURIComponent(s.queryParams['state']));
+			actions.initialWithParams({state});
 		}
-		// get GPS location if possible
-		actions.findLocation();
-
-		/*
-    
-    this.searchFormSubscribe();
-
-    if (locationOption !== '')
-      this.locationOption = locationOption;
-    this.sortOptions = getLocationOptionSortOptions(this.locationOption);
-    if (sortOption !== '')
-      this.sortBy = sortOption;
-    if (cityState && cityState !== '')
-      this.cityState = cityState;
-    if (name && name !== '')
-      this.name = name;
-
-    // on changes to location, set sorting to default if available
-    this.searchForm
-      .controls['locationOption']
-      .valueChanges
-      .subscribe((locationOpt) => {
-        let defaultSort = get(locationOpt, 'defaultSort');
-        this.searchForm.controls['sortBy'].setValue(defaultSort);
-      });
-
-        
-    // setup search grps 
-		*/
   };
+
 
 	public _switchQuery(options) {
     // check if we got any options
@@ -188,4 +176,15 @@ export class SearchComponent {
 	public nameChange(field: string){
 		this.nameChanged.next(field);
 	}	
+
+  ngOnDestroy(){
+    // unsubscribe from all subscriptions
+    if (!isNil(this.grpsObs)){
+      this.grpsSub.unsubscribe();
+    }
+    for (let key of Object.keys(this.subscriptions)){
+      this.subscriptions[key].unsubscribe(); 
+    }
+    this.stateSub();
+  } 
 };

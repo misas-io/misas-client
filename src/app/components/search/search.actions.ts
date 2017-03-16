@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { get } from 'lodash';
 import { Action } from 'redux';
 //import { ThunkAction } from 'redux-thunk';
 import { NgRedux } from '@angular-redux/store';
 import * as BrowserLocation from 'browser-location';
+import get = require('lodash/get');
+// MISAS modules
 import { 
   LOCATION_TYPES,  
   LOCATION_STATUS, 
@@ -173,6 +174,10 @@ const initialState: IState = {
   path: 'search',
 };
 
+function paramsUpdate(state, newParams){
+  return Object.assign({}, state.params, newParams);
+};
+
 export function searchReducer(state: IState = initialState, action: ISearchAction): IState {
   let pointParam;
   switch (action.type) {
@@ -248,11 +253,11 @@ export function searchReducer(state: IState = initialState, action: ISearchActio
       });
     // INITIAL ACTIONS
     case ACTIONS.INITIAL_WITH_PARAMS:
-      return Object.assign({}, state, {
-        params: action.params,    
-      });
+      console.log(action.params.state);
+      return Object.assign({}, state, action.params.state);
     case ACTIONS.INITIAL:
-    default:    
       return initialState;
+    default:    
+      return Object.assign({}, state);
   }    
 };
