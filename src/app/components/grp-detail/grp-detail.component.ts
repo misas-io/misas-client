@@ -24,6 +24,8 @@ export class GrpDetailComponent implements OnInit {
   private grpSub: any;
   public grp: any;
   public calendarOptions: any;
+  public events: any[];
+  public dateToday: Date;
 
   constructor(
     private loadingBar: LoadingBar,
@@ -32,6 +34,8 @@ export class GrpDetailComponent implements OnInit {
     private router: Router,
     private _location: Location
   ) {
+    this.dateToday = new Date();
+    this.events = [];
     this.calendarOptions = {
       height: '100%',
       fixedWeekCount : false,

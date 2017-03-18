@@ -13,7 +13,7 @@ import { MdlSelectModule } from '@angular2-mdl-ext/select';
 import { MdlPopoverModule } from '@angular2-mdl-ext/popover';
 import { NgReduxModule, NgRedux } from '@angular-redux/store'; 
 import { NgReduxRouterModule, NgReduxRouter } from '@angular-redux/router';
-import { CalendarComponent } from "angular2-fullcalendar/src/calendar/calendar";
+import { CalendarModule } from 'angular-calendar';
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -80,8 +80,7 @@ let config: ResponsiveConfigInterface = {
     ListComponent,
     LocaleDate,
     GrpDetailComponent,
-		PrivacyAndTermsComponent,
-    CalendarComponent
+		PrivacyAndTermsComponent
   ],
   imports: [ // import Angular's modules
     ApolloModule.withClient(getClient),
@@ -96,6 +95,7 @@ let config: ResponsiveConfigInterface = {
     MdlSelectModule,
 		NgReduxModule,
     NgReduxRouterModule,
+    CalendarModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey: process.env.GOOGLE_API_KEY 
     }),
