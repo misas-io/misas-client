@@ -77,6 +77,7 @@
     "@angularclass/hmr": "~1.2.2",
     "@angularclass/hmr-loader": "~3.0.2",
     "@types/es6-shim": "^0.31.32",
+    "angular-calendar": "^0.8.0",
     "angular2-google-maps": "^0.17.0",
     "angular2-mdl": "^2.12.1",
     "apollo-angular": "^0.11.0",
