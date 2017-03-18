@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'grps-list', // <grps-list></grps-list>
@@ -10,6 +11,12 @@ import { Component, Input, OnChanges } from '@angular/core';
 export class ListComponent {
   @Input() grps: any;
 
-  constructor() {}
+  constructor(
+    private router: Router
+  ) {}
 
+  public viewGrp(grpId){
+    console.log('viewing grp');
+    this.router.navigate(['/parroquia', grpId], { queryParams: {} });
+  };
 }

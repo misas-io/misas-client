@@ -1,5 +1,5 @@
 <sebm-google-map
-  *ngIf="grpMarkers && grpMarkers.length > 0"
+  *ngIf="( grpMarkers && grpMarkers.length > 0 ) || (currentLocation && currentLocation.coordinates) "
   [fitBounds]="mapBounds"
   (boundsChange)="boundsChange($event)"
   [styles]="mapOptions.style"
