@@ -1,18 +1,28 @@
 <div *ngIf="grp" >
   <div class="mdl-grid">
-    <div class="mdl-cell mdl-cell--6-col">
-      <h3> {{ grp.name }} </h3>
-      <div *ngIf="grp.address">
-        {{ grp.address.address_line_1 }},
-        {{ grp.address.city }},
-        {{ grp.address.state }}
+    <div class="mdl-cell mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone">
+    </div>
+    <div class="mdl-cell mdl-cell--10-col mdl-cell--12-phone mdl-cell--4-phone">
+      <div class="mdl-grid ">
+        <div class="mdl-cell mdl-cell--10-col mdl-cell--12-phone mdl-cell--4-phone">
+          <h3> {{ grp.name }} </h3>
+        </div>
+        <div class="mdl-cell mdl-cell--6-col">
+          <div *ngIf="grp.address">
+            {{ grp.address.address_line_1 }},
+            {{ grp.address.city }},
+            {{ grp.address.state }}
+          </div>
+        </div>
+        <div class="mdl-cell mdl-cell--6-col">
+          <mwl-calendar-month-view [viewDate]="dateToday" [events]="events"></mwl-calendar-month-view>
+        </div>
       </div>
     </div>
-    <div class="mdl-cell mdl-cell--6-col">
+    <div>
+      <!-- {{ grp | json }} -->
     </div>
+  <div class="mdl-cell mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone">
   </div>
-  <div>
-    <mwl-calendar-month-view [viewDate]="dateToday" [events]="events"></mwl-calendar-month-view>
-    <!-- {{ grp | json }} -->
   </div>
 </div>
