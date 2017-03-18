@@ -13,6 +13,10 @@
             {{ grp.address.city }},
             {{ grp.address.state }}
           </div>
+          <grps-map *ngIf="grp.location" 
+             [grps]="{edges: []}" 
+             [currentLocation]="grp.location">
+          </grps-map>
         </div>
         <div class="mdl-cell mdl-cell--6-col">
           <mwl-calendar-month-view [viewDate]="dateToday" [events]="events"></mwl-calendar-month-view>
