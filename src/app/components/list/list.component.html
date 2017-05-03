@@ -22,7 +22,7 @@
 			</div>
 		</mdl-card-supporting-text>
 		<mdl-card-actions mdl-card-border>
-      <button mdl-button mdl-colored mdl-ripple [routerLink]="[ '/parroquia', grp.node.id ]">View</button>
+      <button mdl-button mdl-colored mdl-ripple (click)="viewGrp(grp.node.id)">View</button>
 		</mdl-card-actions>
 		<mdl-card-menu>
 			<button mdl-button mdl-button-type="icon" mdl-ripple>

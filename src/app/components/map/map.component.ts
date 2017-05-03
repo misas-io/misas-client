@@ -1,4 +1,3 @@
-import { get, isNil } from 'lodash';
 import { 
   Component, 
   Output,
@@ -10,6 +9,7 @@ import {
 import { LatLngBounds, LatLng, MapsAPILoader } from 'angular2-google-maps/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import "rxjs/add/operator/debounceTime";
+import isNil = require('lodash/isNil');
 // MISAS modules
 import { style } from './map.component.style';
 
@@ -125,9 +125,9 @@ export class MapComponent implements OnChanges, OnInit {
         return;
       }
       let bounds;
+      this.grpMarkers = [];
       if (this.grps) {
         //this.grpMarkers.splice(0, this.grpMarkers.length);
-        this.grpMarkers = [];
         for (let edge of this.grps.edges) {
           let grp = edge.node;
           if (grp.location.coordinates.length != 2) {

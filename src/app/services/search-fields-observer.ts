@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { get } from 'lodash';
+import get from 'lodash/get';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import * as BrowserLocation from 'browser-location';
